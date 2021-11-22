@@ -13,7 +13,6 @@ class CategoryFragmentAdapter(
     }
 
     override fun createFragment(position: Int): Fragment {
-        val category = categories[position]
-        return CategoryFragment(category)
+        return CategoryFragment(categories[position])
     }
 }
