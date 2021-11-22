@@ -11,11 +11,13 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import cz.johnyapps.cheers.R
-import cz.johnyapps.cheers.categories.Category
 import cz.johnyapps.cheers.databinding.FragmentCategoryBinding
+import cz.johnyapps.cheers.dto.Category
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class CategoryFragment(): Fragment() {
     private lateinit var binding: FragmentCategoryBinding
     private val viewModel: CategoryViewModel by viewModels()

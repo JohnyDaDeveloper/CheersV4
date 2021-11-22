@@ -5,12 +5,17 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import cz.johnyapps.cheers.categories.Category
+import cz.johnyapps.cheers.dto.Category
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class CategoryViewModel(application: Application): AndroidViewModel(application) {
+@HiltViewModel
+class CategoryViewModel @Inject constructor(
+    application: Application
+): AndroidViewModel(application) {
     private val _count = MutableStateFlow(0)
     val count: StateFlow<Int> = _count
 
