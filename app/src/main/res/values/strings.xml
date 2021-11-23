@@ -4,4 +4,20 @@
     <string name="plus">+</string>
     <string name="minus">-</string>
     <string name="zero">0</string>
+    <string name="liter">L</string>
+    <string name="percent">%</string>
+
+    <string name="create">Create</string>
+    <string name="cancel">Cancel</string>
+
+
+    <string name="beverage_name_label">Beverage name</string>
+    <string name="alcohol">Alcohol</string>
+    <string name="volume">Volume</string>
+
+    <string name="dialog_new_counter_title">New counter</string>
+    <string name="dialog_new_counter_empty_name">Name must be at least 1 character long</string>
+    <string name="dialog_new_counter_volume_zero">Volume must be larger than 0</string>
+    <string name="dialog_new_counter_alcohol_zero">Alcohol must be at least 0</string>
+    <string name="dialog_new_counter_general_error">Something went wrong while creating new counter</string>
 </resources>

@@ -9,9 +9,11 @@ import cz.johnyapps.cheers.dto.Entry
 @Entity(tableName = "counter_table")
 data class CounterDbEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    val id: Long,
     @ColumnInfo(name = "beverage_id")
-    val beverageId: Int,
+    val beverageId: Long,
+    @ColumnInfo(name = "alcohol")
+    val alcohol: Float,
     @ColumnInfo(name = "volume")
     val volume: Float,
     @ColumnInfo(name = "active")
@@ -21,19 +23,10 @@ data class CounterDbEntity(
 ) {
     constructor(counter: Counter): this(
         counter.id,
-        counter.beverageId,
+        counter.beverage.id,
+        counter.alcohol,
         counter.volume,
         counter.active,
         counter.entries
     )
-
-    fun toGlobalDto(): Counter {
-        return Counter(
-            id,
-            beverageId,
-            volume,
-            active,
-            entries
-        )
-    }
 }

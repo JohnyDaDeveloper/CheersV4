@@ -1,7 +1,9 @@
 package cz.johnyapps.cheers.beveragerepository
 
 import cz.johnyapps.cheers.beveragedatabase.BeverageDatabase
+import cz.johnyapps.cheers.beveragedatabase.dto.BeverageDbEntity
 import cz.johnyapps.cheers.beveragedatabase.dto.CounterDbEntity
+import cz.johnyapps.cheers.dto.Beverage
 import cz.johnyapps.cheers.dto.Category
 import cz.johnyapps.cheers.dto.Counter
 import kotlinx.coroutines.flow.Flow
@@ -25,7 +27,7 @@ class ProductionBeverageRepository(
     }
 
     override fun getCounter(counterId: Long): Flow<Counter> {
-        return database.counterDao().get(counterId)
+        return database.counterDao().getWithBeverage(counterId)
             .map {
                 it.toGlobalDto()
             }
@@ -33,5 +35,10 @@ class ProductionBeverageRepository(
 
     override fun updateCounter(counter: Counter) {
         database.counterDao().update(CounterDbEntity(counter))
+    }
+
+    override fun insertBeverage(beverage: Beverage) {
+        val id = database.beverageDao().insert(BeverageDbEntity(beverage))
+        beverage.id = id
     }
 }

@@ -8,7 +8,7 @@ import cz.johnyapps.cheers.Icon
 @Entity(tableName = "category_table")
 data class CategoryDbEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    val id: Long,
     @ColumnInfo(name = "name")
     val name: String,
     @ColumnInfo(name = "icon")

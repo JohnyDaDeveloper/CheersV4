@@ -1,18 +1,21 @@
 package cz.johnyapps.cheers.dto
 
 data class Counter(
-    var id: Int,
-    val beverageId: Int,
+    var id: Long, //TODO Change to val
+    val beverage: Beverage,
+    val alcohol: Float,
     val volume: Float,
     val active: Boolean,
     val entries: MutableList<Entry>
 ) {
     constructor(
-        beverageId: Int,
+        beverage: Beverage,
+        alcohol: Float,
         volume: Float
     ): this(
         0,
-        beverageId,
+        beverage,
+        alcohol,
         volume,
         true,
         ArrayList<Entry>()

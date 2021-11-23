@@ -1,20 +1,23 @@
 package cz.johnyapps.cheers.counter.dto
 
+import cz.johnyapps.cheers.dto.Beverage
 import cz.johnyapps.cheers.dto.Counter
 import cz.johnyapps.cheers.dto.Entry
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.*
 
 data class CounterEntity(
-    val id: Int,
-    val beverageId: Int,
+    val id: Long,
+    val beverage: Beverage,
+    val alcohol: Float,
     val volume: Float,
     val active: Boolean,
     val entries: MutableStateFlow<MutableList<Entry>>
 ) {
     constructor(counter: Counter): this(
         counter.id,
-        counter.beverageId,
+        counter.beverage,
+        counter.alcohol,
         counter.volume,
         counter.active,
         MutableStateFlow(counter.entries)
@@ -35,6 +38,13 @@ data class CounterEntity(
     }
 
     fun toGlobalDto(): Counter {
-        return Counter(id, beverageId, volume, active, entries.value)
+        return Counter(
+            id,
+            beverage,
+            alcohol,
+            volume,
+            active,
+            entries.value
+        )
     }
 }

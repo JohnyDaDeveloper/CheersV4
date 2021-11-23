@@ -1,6 +1,7 @@
 package cz.johnyapps.cheers.beveragedatabase.dao
 
 import androidx.room.*
+import cz.johnyapps.cheers.beveragedatabase.dto.CounterAndBeverageDbEntity
 import cz.johnyapps.cheers.beveragedatabase.dto.CounterDbEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -12,6 +13,7 @@ interface CounterDao {
     @Update
     fun update(counter: CounterDbEntity)
 
+    @Transaction
     @Query("SELECT * FROM counter_table WHERE id = :counterId")
-    fun get(counterId: Long): Flow<CounterDbEntity>
+    fun getWithBeverage(counterId: Long): Flow<CounterAndBeverageDbEntity>
 }

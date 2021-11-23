@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="24dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="24dp"
+        style="@style/Theme.AppCompat.Dialog">
+
+        <TextView
+            android:id="@+id/beverageNameLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:labelFor="@id/beverageNameEditText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/beverageNameEditText"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            android:text="@string/beverage_name_label" />
+
+        <EditText
+            android:id="@+id/beverageNameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:importantForAutofill="no"
+            android:inputType="textNoSuggestions|textCapSentences"
+            android:lines="1"
+            android:maxLines="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/beverageNameLabel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <TextView
+            android:id="@+id/alcoholLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:labelFor="@id/alcoholEditText"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/beverageNameEditText"
+            app:layout_constraintEnd_toStartOf="@id/guideline"
+            app:layout_constraintBottom_toTopOf="@id/alcoholEditText"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            android:text="@string/alcohol" />
+
+        <EditText
+            android:id="@+id/alcoholEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:inputType="number"
+            app:layout_constraintStart_toStartOf="@id/alcoholLabel"
+            app:layout_constraintEnd_toStartOf="@id/percentLabel"
+            app:layout_constraintTop_toBottomOf="@id/alcoholLabel"
+            android:importantForAutofill="no" />
+
+        <TextView
+            android:id="@+id/percentLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            android:text="@string/percent"
+            app:layout_constraintStart_toEndOf="@id/alcoholEditText"
+            app:layout_constraintTop_toTopOf="@id/alcoholEditText"
+            app:layout_constraintEnd_toEndOf="@id/alcoholLabel"
+            app:layout_constraintBottom_toBottomOf="@id/alcoholEditText" />
+
+        <TextView
+            android:id="@+id/volumeLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:labelFor="@id/volumeEditText"
+            android:layout_marginStart="8dp"
+            app:layout_constraintStart_toEndOf="@id/guideline"
+            app:layout_constraintTop_toTopOf="@id/alcoholLabel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/volumeEditText"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            android:text="@string/volume" />
+
+        <EditText
+            android:id="@+id/volumeEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:inputType="number"
+            app:layout_constraintStart_toStartOf="@id/volumeLabel"
+            app:layout_constraintEnd_toStartOf="@id/litersLabel"
+            app:layout_constraintTop_toBottomOf="@id/volumeLabel"
+            android:importantForAutofill="no" />
+
+        <TextView
+            android:id="@+id/litersLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            android:text="@string/liter"
+            app:layout_constraintStart_toEndOf="@id/volumeEditText"
+            app:layout_constraintTop_toTopOf="@id/volumeEditText"
+            app:layout_constraintEnd_toEndOf="@id/volumeLabel"
+            app:layout_constraintBottom_toBottomOf="@id/volumeEditText" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
