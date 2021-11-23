@@ -7,15 +7,10 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import cz.johnyapps.cheers.R
 import cz.johnyapps.cheers.databinding.FragmentCategoryBinding
 import cz.johnyapps.cheers.dto.Category
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class CategoryFragment(): Fragment() {
@@ -33,12 +28,6 @@ class CategoryFragment(): Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_category, container, false)
-        binding.plusButton.setOnClickListener {
-            viewModel.increaseCount()
-        }
-        binding.minusButton.setOnClickListener {
-            viewModel.decreaseCount()
-        }
 
         viewModel.category.observe(viewLifecycleOwner, { category ->
             binding.categoryNameTextView.text = category.name
@@ -47,14 +36,6 @@ class CategoryFragment(): Fragment() {
 
         if (category != null) {
             viewModel.setCategory(category as Category)
-        }
-
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.count.collect {
-                    binding.valueTextView.text = it.toString()
-                }
-            }
         }
 
         return binding.root
