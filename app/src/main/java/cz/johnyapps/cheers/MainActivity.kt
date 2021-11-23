@@ -5,6 +5,8 @@ import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import cz.johnyapps.cheers.beveragedatabase.BeverageDatabase
 import cz.johnyapps.cheers.beveragedatabase.dto.CategoryDbEntity
+import cz.johnyapps.cheers.beveragedatabase.dto.CounterDbEntity
+import cz.johnyapps.cheers.dto.Counter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,9 +21,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        /*lifecycleScope.launch(Dispatchers.IO) {
+        lifecycleScope.launch(Dispatchers.IO) {
             database.categoryDao().insert(CategoryDbEntity(
-                0,
+                1,
                 "Beer",
                 Icon.BEER,
                 0,
@@ -29,12 +31,16 @@ class MainActivity : AppCompatActivity() {
             ))
 
             database.categoryDao().insert(CategoryDbEntity(
-                0,
+                2,
                 "Wine",
                 Icon.WINE,
                 0,
                 1
             ))
-        }*/
+
+            val counter = Counter(0, 0.5f)
+            counter.id = 1
+            database.counterDao().insert(CounterDbEntity(counter))
+        }
     }
 }

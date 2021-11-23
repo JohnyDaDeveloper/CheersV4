@@ -11,9 +11,10 @@ import androidx.lifecycle.lifecycleScope
 import cz.johnyapps.cheers.R
 import cz.johnyapps.cheers.databinding.FragmentCounterBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
 
+@FlowPreview
 @AndroidEntryPoint
 class CounterFragment: Fragment() {
     private lateinit var binding: FragmentCounterBinding
@@ -34,14 +35,10 @@ class CounterFragment: Fragment() {
 
         lifecycleScope.launchWhenStarted {
             viewModel.count.collect {
-                binding.valueTextView.text = it.toString()
+                binding.valueTextView.text = it.size.toString()
             }
         }
 
         return binding.root
-    }
-
-    fun getCount(): Flow<Int> {
-        return viewModel.count
     }
 }
