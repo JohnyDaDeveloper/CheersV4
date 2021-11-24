@@ -1,9 +1,7 @@
 package cz.johnyapps.cheers.category
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -29,6 +27,11 @@ class CategoryFragment(): Fragment() {
         this.category = category
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -37,23 +40,6 @@ class CategoryFragment(): Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_category, container, false)
 
         setupCategory()
-
-        binding.categoryNameTextView.setOnClickListener {
-            val beverages = viewModel.beverages.value
-
-            if (beverages != null) {
-                val dialog = NewCounterDialog(beverages)
-                dialog.show(childFragmentManager, NewCounterDialog.TAG)
-
-                lifecycleScope.launch {
-                    dialog.newCounter.collect {
-                        viewModel.saveCounter(it)
-                    }
-                }
-            } else {
-                //TODO Handle beverages not yet loaded state
-            }
-        }
 
         if (category != null) {
             viewModel.setCategory(category as Category)
@@ -68,6 +54,37 @@ class CategoryFragment(): Fragment() {
         fragment.setCounter(viewModel.counter)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.category_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return if (item.itemId == R.id.newCounterMenuItem) {
+            createNewCounter()
+            true
+        } else {
+            super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun createNewCounter() {
+        val beverages = viewModel.beverages.value
+
+        if (beverages != null) {
+            val dialog = NewCounterDialog(beverages)
+            dialog.show(childFragmentManager, NewCounterDialog.TAG)
+
+            lifecycleScope.launch {
+                dialog.newCounter.collect {
+                    viewModel.saveCounter(it)
+                }
+            }
+        } else {
+            //TODO Handle beverages not yet loaded state
+        }
+    }
+
     private fun setupCategory() {
         lifecycleScope.launchWhenStarted {
             viewModel.category.collect { category ->
@@ -79,7 +96,7 @@ class CategoryFragment(): Fragment() {
                     0
                 )
 
-                binding.counterFragment.visibility = if (category?.selectedCounter == null) {
+                binding.counterFragment.visibility = if (category?.selectedCounter?.value == null) {
                     View.GONE
                 } else {
                     View.VISIBLE

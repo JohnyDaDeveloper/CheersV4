@@ -3,11 +3,13 @@ package cz.johnyapps.cheers
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import cz.johnyapps.cheers.beveragedatabase.BeverageDatabase
 import cz.johnyapps.cheers.beveragedatabase.dto.BeverageDbEntity
 import cz.johnyapps.cheers.beveragedatabase.dto.CategoryDbEntity
 import cz.johnyapps.cheers.beveragedatabase.dto.CounterDbEntity
+import cz.johnyapps.cheers.databinding.ActivityMainBinding
 import cz.johnyapps.cheers.dto.Beverage
 import cz.johnyapps.cheers.dto.Counter
 import dagger.hilt.android.AndroidEntryPoint
@@ -17,12 +19,15 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
+
     @Inject
     lateinit var database: BeverageDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        this.setSupportActionBar(binding.toolbar)
 
         lifecycleScope.launch(Dispatchers.IO) {
             database.categoryDao().insert(CategoryDbEntity(

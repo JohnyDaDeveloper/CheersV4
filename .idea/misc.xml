@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Jan Pejsar/StudioProjects/CheersV4/app/src/main/res/drawable/ic_add.xml" value="0.43846153846153846" />
         <entry key="..\:/Users/Jan Pejsar/StudioProjects/CheersV4/app/src/main/res/drawable/ic_beer.xml" value="0.43846153846153846" />
         <entry key="..\:/Users/Jan Pejsar/StudioProjects/CheersV4/app/src/main/res/drawable/ic_wine.xml" value="0.43846153846153846" />
         <entry key="..\:/Users/Jan Pejsar/StudioProjects/CheersV4/app/src/main/res/layout/activity_main.xml" value="0.35778985507246375" />
@@ -12,6 +13,7 @@
         <entry key="..\:/Users/Jan Pejsar/StudioProjects/CheersV4/app/src/main/res/layout/fragment_counter.xml" value="0.20871327254305977" />
         <entry key="..\:/Users/Jan Pejsar/StudioProjects/CheersV4/app/src/main/res/layout/item_with_id.xml" value="0.34782608695652173" />
         <entry key="..\:/Users/Jan Pejsar/StudioProjects/CheersV4/app/src/main/res/layout/view_counter.xml" value="0.24739583333333334" />
+        <entry key="..\:/Users/Jan Pejsar/StudioProjects/CheersV4/app/src/main/res/menu/category_menu.xml" value="0.42916666666666664" />
       </map>
     </option>
   </component>

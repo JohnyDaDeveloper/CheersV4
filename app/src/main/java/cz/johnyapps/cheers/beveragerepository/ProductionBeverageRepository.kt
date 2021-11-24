@@ -2,6 +2,7 @@ package cz.johnyapps.cheers.beveragerepository
 
 import cz.johnyapps.cheers.beveragedatabase.BeverageDatabase
 import cz.johnyapps.cheers.beveragedatabase.dto.BeverageDbEntity
+import cz.johnyapps.cheers.beveragedatabase.dto.CategoryDbEntity
 import cz.johnyapps.cheers.beveragedatabase.dto.CounterDbEntity
 import cz.johnyapps.cheers.dto.Beverage
 import cz.johnyapps.cheers.dto.Category
@@ -15,8 +16,8 @@ import kotlinx.coroutines.flow.map
 class ProductionBeverageRepository(
     private val database: BeverageDatabase
 ): BeverageRepository {
-    override fun insertCategory(category: Category) {
-        TODO("Not yet implemented")
+    override suspend fun insertCategory(category: Category) {
+        database.categoryDao().insert(CategoryDbEntity(category))
     }
 
     override fun getAllCategories(): Flow<List<Category>> {
@@ -41,8 +42,13 @@ class ProductionBeverageRepository(
         }
     }
 
-    override fun insertCounter(counter: Counter) {
-        database.counterDao().insert(CounterDbEntity(counter))
+    override fun updateCategory(category: Category) {
+        database.categoryDao().update(CategoryDbEntity(category))
+    }
+
+    override suspend fun insertCounter(counter: Counter) {
+        val id = database.counterDao().insert(CounterDbEntity(counter))
+        counter.id = id
     }
 
     override fun getCounter(counterId: Long): Flow<Counter> {

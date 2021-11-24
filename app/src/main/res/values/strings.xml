@@ -10,6 +10,7 @@
     <string name="create">Create</string>
     <string name="cancel">Cancel</string>
 
+    <string name="new_counter_menu_item">New counter</string>
 
     <string name="beverage_name_label">Beverage name</string>
     <string name="alcohol">Alcohol</string>

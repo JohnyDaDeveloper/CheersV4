@@ -10,6 +10,9 @@ interface CategoryDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(category: CategoryDbEntity)
 
+    @Update
+    fun update(category: CategoryDbEntity)
+
     @Transaction
     @Query("SELECT * FROM counter_table")
     fun getAllWithCounters(): Flow<List<CategoryAndCounterDbEntity>>

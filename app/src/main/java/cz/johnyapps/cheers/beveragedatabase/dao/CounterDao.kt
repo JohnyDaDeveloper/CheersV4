@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface CounterDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(counter: CounterDbEntity)
+    suspend fun insert(counter: CounterDbEntity): Long
 
     @Update
     fun update(counter: CounterDbEntity)

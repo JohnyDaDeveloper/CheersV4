@@ -16,10 +16,18 @@ data class CategoryDbEntity(
     @ColumnInfo(name = "icon")
     val icon: Icon,
     @ColumnInfo(name = "selected_counter_id")
-    val selectedCounterId: Int,
+    val selectedCounterId: Long,
     @ColumnInfo(name = "order")
     val order: Int
 ) {
+    constructor(category: Category): this(
+        category.id,
+        category.name,
+        category.icon,
+        category.selectedCounter?.id ?: 0L,
+        category.order
+    )
+
     fun toGlobalDto(): Category {
         return Category(
             id,

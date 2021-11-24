@@ -21,8 +21,8 @@ class CategoryViewModel @Inject constructor(
     application: Application,
     private val repository: BeverageRepository
 ): AndroidViewModel(application) {
-    private val _category = MutableStateFlow<Category?>(null)
-    val category: StateFlow<Category?> = _category
+    private val _category = MutableStateFlow<CategoryEntity?>(null)
+    val category: StateFlow<CategoryEntity?> = _category
 
     private val _beverages = MutableStateFlow<List<Beverage>?>(null)
     val beverages: StateFlow<List<Beverage>?> = _beverages
@@ -39,14 +39,16 @@ class CategoryViewModel @Inject constructor(
 
         viewModelScope.launch {
             category.collect {
-                _counter.emit(it?.selectedCounter)
+                it?.selectedCounter?.collect { counter ->
+                    _counter.emit(counter)
+                }
             }
         }
     }
 
     fun setCategory(category: Category) {
         viewModelScope.launch {
-            _category.emit(category)
+            _category.emit(CategoryEntity(category))
         }
     }
 
@@ -61,6 +63,13 @@ class CategoryViewModel @Inject constructor(
 
             Logger.i(TAG, "saveCounter: Saving counter for '${beverage.name}' (id: ${beverage.id})")
             repository.insertCounter(counter)
+
+            val category = category.value
+            
+            if (category != null) {
+                category.selectedCounter.emit(counter)
+                repository.updateCategory(category.toGlobalDto())
+            }
         }
     }
 
