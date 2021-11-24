@@ -3,6 +3,7 @@ package cz.johnyapps.cheers.counter.dto
 import cz.johnyapps.cheers.dto.Beverage
 import cz.johnyapps.cheers.dto.Counter
 import cz.johnyapps.cheers.dto.Entry
+import cz.johnyapps.cheers.utils.TextUtils
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.*
 
@@ -46,6 +47,6 @@ data class CounterEntity(
     }
 
     fun getFullName(): String {
-        return String.format("%s %.2fL", beverage.name, volume)
+        return "${beverage.name} ${TextUtils.decimalToStringWithTwoDecimalDigits(volume.toDouble())}L"
     }
 }
