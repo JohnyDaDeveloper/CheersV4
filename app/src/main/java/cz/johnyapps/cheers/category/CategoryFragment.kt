@@ -99,14 +99,7 @@ class CategoryFragment(): Fragment() {
     private fun setupCategory() {
         lifecycleScope.launchWhenStarted {
             viewModel.category.collect { category ->
-                binding.categoryNameTextView.text = category?.name
-                binding.categoryNameTextView.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                    0,
-                    category?.icon?.iconId ?: 0,
-                    0,
-                    0
-                )
-
+                binding.category = category
                 binding.counterFragment.visibility = if (category?.selectedCounter?.value == null) {
                     View.GONE
                 } else {

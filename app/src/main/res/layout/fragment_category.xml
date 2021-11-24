@@ -7,21 +7,23 @@
         android:layout_height="match_parent"
         android:padding="8dp">
 
-        <TextView
-            android:id="@+id/categoryNameTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/categoryImageView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitCenter"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@id/counterCard"
-            android:gravity="center" />
+            app:srcId="@{category.icon.iconId}" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/counterCard"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/categoryImageView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
 
@@ -32,4 +34,10 @@
                 android:name="cz.johnyapps.cheers.counter.CounterFragment" />
         </com.google.android.material.card.MaterialCardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <data>
+        <variable
+            name="category"
+            type="cz.johnyapps.cheers.category.CategoryEntity" />
+    </data>
 </layout>
