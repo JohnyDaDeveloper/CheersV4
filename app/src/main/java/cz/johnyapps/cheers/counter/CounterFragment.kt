@@ -39,6 +39,12 @@ class CounterFragment: Fragment() {
             }
         }
 
+        lifecycleScope.launchWhenStarted {
+            viewModel.counter.collect {
+                binding.counter = it
+            }
+        }
+
         return binding.root
     }
 }
