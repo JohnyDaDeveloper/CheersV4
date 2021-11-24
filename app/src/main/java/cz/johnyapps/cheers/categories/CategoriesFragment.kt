@@ -13,10 +13,12 @@ import androidx.lifecycle.repeatOnLifecycle
 import cz.johnyapps.cheers.R
 import cz.johnyapps.cheers.databinding.FragmentCategoriesBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
+@FlowPreview
 class CategoriesFragment: Fragment() {
     private lateinit var binding: FragmentCategoriesBinding
     private lateinit var adapter: CategoryFragmentAdapter

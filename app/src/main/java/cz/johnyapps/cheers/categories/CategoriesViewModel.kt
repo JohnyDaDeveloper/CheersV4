@@ -12,5 +12,4 @@ class CategoriesViewModel @Inject constructor(
     repository: BeverageRepository
 ): AndroidViewModel(application) {
     val categories = repository.getAllCategories()
-    val beverages = repository.getAllBeverages()
 }

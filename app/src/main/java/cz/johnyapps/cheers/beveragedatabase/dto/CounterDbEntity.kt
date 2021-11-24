@@ -3,12 +3,14 @@ package cz.johnyapps.cheers.beveragedatabase.dto
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import cz.johnyapps.cheers.dto.Beverage
 import cz.johnyapps.cheers.dto.Counter
 import cz.johnyapps.cheers.dto.Entry
 
 @Entity(tableName = "counter_table")
 data class CounterDbEntity(
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "counter_id")
     val id: Long,
     @ColumnInfo(name = "beverage_id")
     val beverageId: Long,
@@ -26,4 +28,14 @@ data class CounterDbEntity(
         counter.active,
         counter.entries
     )
+
+    fun toGlobalDto(beverageDbEntity: Beverage): Counter {
+        return Counter(
+            id,
+            beverageDbEntity,
+            volume,
+            active,
+            entries
+        )
+    }
 }

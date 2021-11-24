@@ -9,7 +9,7 @@ data class CounterAndBeverageDbEntity(
     val counter: CounterDbEntity,
     @Relation(
         parentColumn = "beverage_id",
-        entityColumn = "id"
+        entityColumn = "beverage_id"
     )
     val beverage: BeverageDbEntity
 ) {

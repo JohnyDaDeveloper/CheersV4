@@ -36,19 +36,22 @@ class CounterViewModel @Inject constructor(
         }.debounce(COUNTER_DEBOUNCE_DELAY)
 
         viewModelScope.launch(Dispatchers.IO) {
-            setCounter(repository.getCounter(1))
-
             debouncedCounter.collect {
-                Logger.d(TAG, "Updating counter with ${it?.entries?.size} entries (id: ${it?.id})")
-                it?.let { repository.updateCounter(it) }
+                it?.let {
+                    Logger.d(TAG, "Updating counter of '${it.beverage.name}' with ${it.entries.size} entries (id: ${it.id})")
+                    repository.updateCounter(it)
+                }
             }
         }
     }
 
-    private fun setCounter(counter: Flow<Counter>) {
+    fun setCounter(counter: StateFlow<Counter?>) {
         viewModelScope.launch {
+            val counterEntity = counter.value
+            _counter.emit(counterEntity?.let { CounterEntity(counterEntity) })
+
             counter.map {
-                CounterEntity(it)
+                it?.let { CounterEntity(it) }
             }.collect {
                 _counter.emit(it)
                 _counter.value?.entries?.collect { list ->

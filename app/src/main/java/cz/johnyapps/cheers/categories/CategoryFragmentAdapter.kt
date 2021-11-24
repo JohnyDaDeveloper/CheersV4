@@ -4,7 +4,9 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import cz.johnyapps.cheers.category.CategoryFragment
 import cz.johnyapps.cheers.dto.Category
+import kotlinx.coroutines.FlowPreview
 
+@FlowPreview
 class CategoryFragmentAdapter(
     parentFragment: Fragment
 ): FragmentStateAdapter(parentFragment) {

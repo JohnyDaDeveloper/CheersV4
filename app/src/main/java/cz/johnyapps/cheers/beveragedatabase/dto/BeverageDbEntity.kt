@@ -8,6 +8,7 @@ import cz.johnyapps.cheers.dto.Beverage
 @Entity(tableName = "beverage_table")
 data class BeverageDbEntity (
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "beverage_id")
     val id: Long,
     @ColumnInfo(name = "name")
     val name: String,

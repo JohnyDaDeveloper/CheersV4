@@ -1,16 +1,21 @@
 package cz.johnyapps.cheers.dto
 
 import cz.johnyapps.cheers.Icon
-import cz.johnyapps.cheers.beveragedatabase.dto.CategoryDbEntity
 
 data class Category(
     val id: Long,
     val name: String,
-    val icon: Icon
-) {
-    constructor(category: CategoryDbEntity): this(
-        category.id,
-        category.name,
-        category.icon
-    )
+    val icon: Icon,
+    val selectedCounter: Counter?,
+    val order: Int
+): Comparable<Category> {
+    override fun compareTo(other: Category): Int {
+        if (other.order < order) {
+            return 1
+        } else if (other.order == order) {
+            return 0
+        }
+
+        return -1
+    }
 }

@@ -9,14 +9,17 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import cz.johnyapps.cheers.R
+import cz.johnyapps.cheers.counter.CounterFragment
 import cz.johnyapps.cheers.counter.NewCounterDialog
 import cz.johnyapps.cheers.databinding.FragmentCategoryBinding
 import cz.johnyapps.cheers.dto.Category
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
+@FlowPreview
 class CategoryFragment(): Fragment() {
     private lateinit var binding: FragmentCategoryBinding
     private val viewModel: CategoryViewModel by viewModels()
@@ -59,6 +62,12 @@ class CategoryFragment(): Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val fragment = binding.counterFragment.getFragment<CounterFragment>()
+        fragment.setCounter(viewModel.counter)
+    }
+
     private fun setupCategory() {
         lifecycleScope.launchWhenStarted {
             viewModel.category.collect { category ->
@@ -69,6 +78,12 @@ class CategoryFragment(): Fragment() {
                     0,
                     0
                 )
+
+                binding.counterFragment.visibility = if (category?.selectedCounter == null) {
+                    View.GONE
+                } else {
+                    View.VISIBLE
+                }
             }
         }
     }

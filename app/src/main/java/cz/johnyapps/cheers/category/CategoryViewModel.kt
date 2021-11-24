@@ -27,16 +27,27 @@ class CategoryViewModel @Inject constructor(
     private val _beverages = MutableStateFlow<List<Beverage>?>(null)
     val beverages: StateFlow<List<Beverage>?> = _beverages
 
+    private val _counter = MutableStateFlow<Counter?>(null)
+    val counter: StateFlow<Counter?> = _counter
+
     init {
         viewModelScope.launch {
             repository.getAllBeverages().collect {
                 _beverages.emit(it)
             }
         }
+
+        viewModelScope.launch {
+            category.collect {
+                _counter.emit(it?.selectedCounter)
+            }
+        }
     }
 
     fun setCategory(category: Category) {
-        _category.value = category
+        viewModelScope.launch {
+            _category.emit(category)
+        }
     }
 
     fun saveCounter(counter: Counter) {

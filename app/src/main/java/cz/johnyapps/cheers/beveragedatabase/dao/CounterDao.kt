@@ -14,6 +14,6 @@ interface CounterDao {
     fun update(counter: CounterDbEntity)
 
     @Transaction
-    @Query("SELECT * FROM counter_table WHERE id = :counterId")
+    @Query("SELECT * FROM counter_table WHERE counter_id = :counterId")
     fun getWithBeverage(counterId: Long): Flow<CounterAndBeverageDbEntity>
 }

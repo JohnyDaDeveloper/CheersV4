@@ -10,8 +10,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import cz.johnyapps.cheers.R
 import cz.johnyapps.cheers.databinding.FragmentCounterBinding
+import cz.johnyapps.cheers.dto.Counter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 
 @FlowPreview
@@ -46,5 +49,9 @@ class CounterFragment: Fragment() {
         }
 
         return binding.root
+    }
+
+    fun setCounter(counter: StateFlow<Counter?>) {
+        viewModel.setCounter(counter)
     }
 }
