@@ -26,6 +26,7 @@ data class CategoryAndCounterDbEntity(
                 category.id,
                 category.name,
                 category.icon,
+                category.sounds,
                 counter.toGlobalDto(beverage.toGlobalDto()),
                 category.order
             )

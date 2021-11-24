@@ -3,12 +3,14 @@ package cz.johnyapps.cheers.category
 import cz.johnyapps.cheers.Icon
 import cz.johnyapps.cheers.dto.Category
 import cz.johnyapps.cheers.dto.Counter
+import cz.johnyapps.cheers.Sound
 import kotlinx.coroutines.flow.MutableStateFlow
 
 data class CategoryEntity(
     val id: Long,
     val name: String,
     val icon: Icon,
+    val sounds: List<Sound>,
     val selectedCounter: MutableStateFlow<Counter?>,
     val order: Int
 ) {
@@ -16,6 +18,7 @@ data class CategoryEntity(
         category.id,
         category.name,
         category.icon,
+        category.sounds,
         MutableStateFlow(category.selectedCounter),
         category.order
     )
@@ -25,6 +28,7 @@ data class CategoryEntity(
             id,
             name,
             icon,
+            sounds,
             selectedCounter.value,
             order
         )

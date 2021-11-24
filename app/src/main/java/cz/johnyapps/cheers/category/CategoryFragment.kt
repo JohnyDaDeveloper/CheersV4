@@ -39,7 +39,9 @@ class CategoryFragment(): Fragment() {
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_category, container, false)
 
+
         setupCategory()
+        setupCounter()
 
         if (category != null) {
             viewModel.setCategory(category as Category)
@@ -82,6 +84,15 @@ class CategoryFragment(): Fragment() {
             }
         } else {
             //TODO Handle beverages not yet loaded state
+        }
+    }
+
+    private fun setupCounter() {
+        lifecycleScope.launchWhenCreated {
+            viewModel.counter.collect {
+                val fragment = binding.counterFragment.getFragment<CounterFragment?>()
+                fragment?.setCounter(viewModel.counter)
+            }
         }
     }
 

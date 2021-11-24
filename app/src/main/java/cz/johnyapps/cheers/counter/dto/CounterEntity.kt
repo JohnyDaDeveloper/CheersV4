@@ -44,4 +44,8 @@ data class CounterEntity(
             entries.value
         )
     }
+
+    fun getFullName(): String {
+        return String.format("%s %.2fL", beverage.name, volume)
+    }
 }

@@ -1,11 +1,13 @@
 package cz.johnyapps.cheers.dto
 
 import cz.johnyapps.cheers.Icon
+import cz.johnyapps.cheers.Sound
 
 data class Category(
     val id: Long,
     val name: String,
     val icon: Icon,
+    val sounds: List<Sound>,
     val selectedCounter: Counter?,
     val order: Int
 ): Comparable<Category> {

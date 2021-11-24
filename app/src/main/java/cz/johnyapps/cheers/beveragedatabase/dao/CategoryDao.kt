@@ -14,7 +14,7 @@ interface CategoryDao {
     fun update(category: CategoryDbEntity)
 
     @Transaction
-    @Query("SELECT * FROM counter_table")
+    @Query("SELECT * FROM counter_table WHERE active = 1")
     fun getAllWithCounters(): Flow<List<CategoryAndCounterDbEntity>>
 
     @Query("SELECT * FROM category_table WHERE selected_counter_id < 1")

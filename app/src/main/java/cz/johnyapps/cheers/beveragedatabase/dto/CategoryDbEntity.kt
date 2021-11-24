@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import cz.johnyapps.cheers.Icon
 import cz.johnyapps.cheers.dto.Category
+import cz.johnyapps.cheers.Sound
 
 @Entity(tableName = "category_table")
 data class CategoryDbEntity(
@@ -15,6 +16,8 @@ data class CategoryDbEntity(
     val name: String,
     @ColumnInfo(name = "icon")
     val icon: Icon,
+    @ColumnInfo(name = "sounds")
+    val sounds: List<Sound>,
     @ColumnInfo(name = "selected_counter_id")
     val selectedCounterId: Long,
     @ColumnInfo(name = "order")
@@ -24,6 +27,7 @@ data class CategoryDbEntity(
         category.id,
         category.name,
         category.icon,
+        category.sounds,
         category.selectedCounter?.id ?: 0L,
         category.order
     )
@@ -33,6 +37,7 @@ data class CategoryDbEntity(
             id,
             name,
             icon,
+            sounds,
             null,
             order
         )

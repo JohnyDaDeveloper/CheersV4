@@ -67,8 +67,11 @@ class CategoryViewModel @Inject constructor(
             val category = category.value
             
             if (category != null) {
+                Logger.d(TAG, "saveCounter: Emitting ${counter.beverage.name}")
                 category.selectedCounter.emit(counter)
                 repository.updateCategory(category.toGlobalDto())
+            } else {
+                Logger.w(TAG, "saveCounter: Category is null")
             }
         }
     }
