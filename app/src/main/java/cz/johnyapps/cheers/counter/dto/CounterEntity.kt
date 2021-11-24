@@ -9,7 +9,6 @@ import java.util.*
 data class CounterEntity(
     val id: Long,
     val beverage: Beverage,
-    val alcohol: Float,
     val volume: Float,
     val active: Boolean,
     val entries: MutableStateFlow<MutableList<Entry>>
@@ -17,7 +16,6 @@ data class CounterEntity(
     constructor(counter: Counter): this(
         counter.id,
         counter.beverage,
-        counter.alcohol,
         counter.volume,
         counter.active,
         MutableStateFlow(counter.entries)
@@ -41,7 +39,6 @@ data class CounterEntity(
         return Counter(
             id,
             beverage,
-            alcohol,
             volume,
             active,
             entries.value

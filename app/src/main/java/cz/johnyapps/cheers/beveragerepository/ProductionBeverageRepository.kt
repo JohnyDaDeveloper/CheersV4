@@ -41,4 +41,10 @@ class ProductionBeverageRepository(
         val id = database.beverageDao().insert(BeverageDbEntity(beverage))
         beverage.id = id
     }
+
+    override fun getAllBeverages(): Flow<List<Beverage>> {
+        return database.beverageDao().getAll().map {
+            it.map { beverage -> beverage.toGlobalDto() }
+        }
+    }
 }

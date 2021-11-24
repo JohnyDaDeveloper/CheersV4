@@ -8,6 +8,7 @@
         android:paddingStart="24dp"
         android:paddingTop="16dp"
         android:paddingEnd="24dp"
+        android:paddingBottom="16dp"
         style="@style/Theme.AppCompat.Dialog">
 
         <TextView
@@ -22,14 +23,14 @@
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
             android:text="@string/beverage_name_label" />
 
-        <EditText
+        <cz.johnyapps.cheers.views.FlowAutoCompleteTextView
             android:id="@+id/beverageNameEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:importantForAutofill="no"
-            android:inputType="textNoSuggestions|textCapSentences"
-            android:lines="1"
             android:maxLines="1"
+            android:inputType="text"
+            android:completionThreshold="1"
+            app:beverage="@{beverage}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/beverageNameLabel"
             app:layout_constraintEnd_toEndOf="parent"
@@ -62,6 +63,8 @@
             android:layout_height="wrap_content"
             android:gravity="end"
             android:inputType="number"
+            android:enabled="@{beverage == null}"
+            app:alcohol="@{beverage}"
             app:layout_constraintStart_toStartOf="@id/alcoholLabel"
             app:layout_constraintEnd_toStartOf="@id/percentLabel"
             app:layout_constraintTop_toBottomOf="@id/alcoholLabel"
@@ -113,4 +116,10 @@
             app:layout_constraintEnd_toEndOf="@id/volumeLabel"
             app:layout_constraintBottom_toBottomOf="@id/volumeEditText" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <data>
+        <variable
+            name="beverage"
+            type="cz.johnyapps.cheers.dto.Beverage" />
+    </data>
 </layout>

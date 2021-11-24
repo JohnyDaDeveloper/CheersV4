@@ -14,4 +14,5 @@ interface BeverageRepository {
     fun updateCounter(counter: Counter)
 
     fun insertBeverage(beverage: Beverage)
+    fun getAllBeverages(): Flow<List<Beverage>>
 }

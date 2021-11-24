@@ -8,7 +8,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import cz.johnyapps.cheers.Logger
 import cz.johnyapps.cheers.R
 import cz.johnyapps.cheers.counter.NewCounterDialog
 import cz.johnyapps.cheers.databinding.FragmentCategoryBinding
@@ -34,19 +33,22 @@ class CategoryFragment(): Fragment() {
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_category, container, false)
 
-        viewModel.category.observe(viewLifecycleOwner, { category ->
-            binding.categoryNameTextView.text = category.name
-            binding.categoryNameTextView.setCompoundDrawablesRelativeWithIntrinsicBounds(0, category.icon.iconId, 0, 0)
-        })
+        setupCategory()
 
         binding.categoryNameTextView.setOnClickListener {
-            val dialog = NewCounterDialog()
-            dialog.show(childFragmentManager, NewCounterDialog.TAG)
+            val beverages = viewModel.beverages.value
 
-            lifecycleScope.launch {
-                dialog.newCounter.collect {
-                    viewModel.saveCounter(it)
+            if (beverages != null) {
+                val dialog = NewCounterDialog(beverages)
+                dialog.show(childFragmentManager, NewCounterDialog.TAG)
+
+                lifecycleScope.launch {
+                    dialog.newCounter.collect {
+                        viewModel.saveCounter(it)
+                    }
                 }
+            } else {
+                //TODO Handle beverages not yet loaded state
             }
         }
 
@@ -55,5 +57,19 @@ class CategoryFragment(): Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun setupCategory() {
+        lifecycleScope.launchWhenStarted {
+            viewModel.category.collect { category ->
+                binding.categoryNameTextView.text = category?.name
+                binding.categoryNameTextView.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                    0,
+                    category?.icon?.iconId ?: 0,
+                    0,
+                    0
+                )
+            }
+        }
     }
 }

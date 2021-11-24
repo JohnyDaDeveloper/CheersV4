@@ -41,10 +41,10 @@ class MainActivity : AppCompatActivity() {
                 1
             ))
 
-            val beverage = Beverage(1, "Beer", Color.RED, Color.BLACK, null)
+            val beverage = Beverage(1, "Beer", 4f, Color.RED, Color.BLACK, null)
             database.beverageDao().insert(BeverageDbEntity(beverage))
 
-            val counter = Counter(beverage, 0.04f, 0.5f)
+            val counter = Counter(beverage, 0.5f)
             counter.id = 1
             database.counterDao().insert(CounterDbEntity(counter))
         }

@@ -11,6 +11,8 @@ data class BeverageDbEntity (
     val id: Long,
     @ColumnInfo(name = "name")
     val name: String,
+    @ColumnInfo(name = "alcohol")
+    val alcohol: Float,
     @ColumnInfo(name = "color")
     val color: Int,
     @ColumnInfo(name = "text_color")
@@ -21,6 +23,7 @@ data class BeverageDbEntity (
     constructor(beverage: Beverage): this(
         beverage.id,
         beverage.name,
+        beverage.alcohol,
         beverage.color,
         beverage.textColor,
         beverage.description
@@ -30,6 +33,7 @@ data class BeverageDbEntity (
         return Beverage(
             id,
             name,
+            alcohol,
             color,
             textColor,
             description

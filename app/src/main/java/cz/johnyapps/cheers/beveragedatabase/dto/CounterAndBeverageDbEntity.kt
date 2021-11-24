@@ -17,7 +17,6 @@ data class CounterAndBeverageDbEntity(
         return Counter(
             counter.id,
             beverage.toGlobalDto(),
-            counter.alcohol,
             counter.volume,
             counter.active,
             counter.entries

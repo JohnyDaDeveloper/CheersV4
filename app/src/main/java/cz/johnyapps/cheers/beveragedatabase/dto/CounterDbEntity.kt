@@ -12,8 +12,6 @@ data class CounterDbEntity(
     val id: Long,
     @ColumnInfo(name = "beverage_id")
     val beverageId: Long,
-    @ColumnInfo(name = "alcohol")
-    val alcohol: Float,
     @ColumnInfo(name = "volume")
     val volume: Float,
     @ColumnInfo(name = "active")
@@ -24,7 +22,6 @@ data class CounterDbEntity(
     constructor(counter: Counter): this(
         counter.id,
         counter.beverage.id,
-        counter.alcohol,
         counter.volume,
         counter.active,
         counter.entries
