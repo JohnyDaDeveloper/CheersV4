@@ -2,38 +2,35 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="8dp">
+        android:layout_height="match_parent">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/categoryImageView"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="16dp"
             android:scaleType="fitCenter"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/counterCard"
+            app:srcCompat="@drawable/ic_beer"
             app:srcId="@{category.icon.iconId}" />
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/counterCard"
-            android:layout_width="0dp"
+        <FrameLayout
+            android:id="@+id/bottomSheet"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/categoryImageView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:behavior_fitToContents="false"
+            app:behavior_hideable="false"
+            app:behavior_skipCollapsed="true"
+            app:layout_behavior="@string/bottom_sheet_behavior">
 
-            <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/counterFragment"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/countersRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:name="cz.johnyapps.cheers.counter.CounterFragment" />
-        </com.google.android.material.card.MaterialCardView>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                android:layout_height="match_parent"
+                android:background="?colorSurface" />
+        </FrameLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <data>
         <variable

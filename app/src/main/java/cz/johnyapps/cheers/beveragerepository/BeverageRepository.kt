@@ -12,6 +12,7 @@ interface BeverageRepository {
 
     suspend fun insertCounter(counter: Counter)
     fun getCounter(counterId: Long): Flow<Counter>
+    fun getAllCounters(): Flow<List<Counter>>
     fun updateCounter(counter: Counter)
 
     fun insertBeverage(beverage: Beverage)

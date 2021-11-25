@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@{counter.beverage.color}"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{counter.fullName}"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:textColor="@{counter.beverage.textColor}"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/minusButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:text="@string/minus"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+                    android:textColor="@{counter.beverage.textColor}"
+                    android:layout_weight="3" />
+
+                <TextView
+                    android:id="@+id/valueTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+                    android:text="@string/zero"
+                    android:gravity="center"
+                    app:counterEntries="@{counterEntries}"
+                    android:textColor="@{counter.beverage.textColor}" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/plusButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:text="@string/plus"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+                    android:textColor="@{counter.beverage.textColor}"
+                    android:layout_weight="3" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </com.google.android.material.card.MaterialCardView>
+
+    <data>
+        <variable
+            name="counter"
+            type="cz.johnyapps.cheers.counter.dto.CounterEntity" />
+
+        <variable
+            name="counterEntries"
+            type="java.util.List&lt;cz.johnyapps.cheers.dto.Entry>" />
+    </data>
+</layout>

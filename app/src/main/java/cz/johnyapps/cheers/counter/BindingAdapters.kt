@@ -1,8 +1,10 @@
 package cz.johnyapps.cheers.counter
 
 import android.widget.EditText
+import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import cz.johnyapps.cheers.dto.Beverage
+import cz.johnyapps.cheers.dto.Entry
 
 object BindingAdapters {
     @BindingAdapter("app:alcohol")
@@ -20,5 +22,11 @@ object BindingAdapters {
             editText.setText(beverage.name)
             editText.setSelection(editText.text.length)
         }
+    }
+
+    @BindingAdapter("app:counterEntries")
+    @JvmStatic
+    fun appCounterEntries(textView: TextView, entries: List<Entry>?) {
+        textView.text = entries?.size?.toString() ?: "0"
     }
 }

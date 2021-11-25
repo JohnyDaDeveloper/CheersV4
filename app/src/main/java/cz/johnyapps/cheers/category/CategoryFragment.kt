@@ -2,30 +2,41 @@ package cz.johnyapps.cheers.category
 
 import android.os.Bundle
 import android.view.*
+import android.widget.FrameLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import cz.johnyapps.cheers.R
-import cz.johnyapps.cheers.counter.CounterFragment
+import cz.johnyapps.cheers.counter.CountersAdapter
 import cz.johnyapps.cheers.counter.NewCounterDialog
 import cz.johnyapps.cheers.databinding.FragmentCategoryBinding
 import cz.johnyapps.cheers.dto.Category
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 @FlowPreview
+@ExperimentalCoroutinesApi
 class CategoryFragment(): Fragment() {
     private lateinit var binding: FragmentCategoryBinding
     private val viewModel: CategoryViewModel by viewModels()
     private var category: Category? = null
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<FrameLayout>
+    private val counterAdapter = CountersAdapter(lifecycleScope)
 
     constructor(category: Category): this() {
         this.category = category
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,22 +45,15 @@ class CategoryFragment(): Fragment() {
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_category, container, false)
 
-
         setupCategory()
-        setupCounter()
+        setupBottomSheet()
+        setupCounters()
 
         if (category != null) {
             viewModel.setCategory(category as Category)
         }
 
         return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val fragment = binding.counterFragment.getFragment<CounterFragment>()
-        fragment.setCounter(viewModel.counter)
     }
 
     override fun onResume() {
@@ -71,6 +75,27 @@ class CategoryFragment(): Fragment() {
         }
     }
 
+    private fun setupCounters() {
+        binding.countersRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.countersRecyclerView.adapter = counterAdapter
+
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.counters.collect {
+                    counterAdapter.submitList(it)
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                counterAdapter.counterUpdate.debounce(500L).collect {
+                    viewModel.saveCounter(it)
+                }
+            }
+        }
+    }
+
     private fun createNewCounter() {
         val beverages = viewModel.beverages.value
 
@@ -88,25 +113,29 @@ class CategoryFragment(): Fragment() {
         }
     }
 
-    private fun setupCounter() {
-        lifecycleScope.launchWhenCreated {
-            viewModel.counter.collect {
-                val fragment = binding.counterFragment.getFragment<CounterFragment?>()
-                fragment?.setCounter(viewModel.counter)
+    private fun setupBottomSheet() {
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheet)
+        bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+
             }
-        }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+
+            }
+
+        })
     }
 
     private fun setupCategory() {
         lifecycleScope.launchWhenStarted {
             viewModel.category.collect { category ->
                 binding.category = category
-                binding.counterFragment.visibility = if (category?.selectedCounter?.value == null) {
-                    View.GONE
-                } else {
-                    View.VISIBLE
-                }
             }
         }
+    }
+
+    companion object {
+        private const val TAG = "CategoryFragment"
     }
 }

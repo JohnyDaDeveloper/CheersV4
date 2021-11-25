@@ -16,4 +16,8 @@ interface CounterDao {
     @Transaction
     @Query("SELECT * FROM counter_table WHERE counter_id = :counterId")
     fun getWithBeverage(counterId: Long): Flow<CounterAndBeverageDbEntity>
+
+    @Transaction
+    @Query("SELECT * FROM counter_table WHERE active = 1")
+    fun getAllWithBeverages(): Flow<List<CounterAndBeverageDbEntity>>
 }

@@ -4,8 +4,10 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import cz.johnyapps.cheers.category.CategoryFragment
 import cz.johnyapps.cheers.dto.Category
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 
+@ExperimentalCoroutinesApi
 @FlowPreview
 class CategoryFragmentAdapter(
     parentFragment: Fragment
@@ -15,6 +17,7 @@ class CategoryFragmentAdapter(
     override fun getItemCount(): Int {
         return categories.size
     }
+
 
     override fun createFragment(position: Int): Fragment {
         return CategoryFragment(categories[position])

@@ -58,6 +58,12 @@ class ProductionBeverageRepository(
             }
     }
 
+    override fun getAllCounters(): Flow<List<Counter>> {
+        return database.counterDao().getAllWithBeverages().map {
+            it.map { counter -> counter.toGlobalDto() }
+        }
+    }
+
     override fun updateCounter(counter: Counter) {
         database.counterDao().update(CounterDbEntity(counter))
     }

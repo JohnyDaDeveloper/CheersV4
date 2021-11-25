@@ -27,8 +27,11 @@ class CategoryViewModel @Inject constructor(
     private val _beverages = MutableStateFlow<List<Beverage>?>(null)
     val beverages: StateFlow<List<Beverage>?> = _beverages
 
-    private val _counter = MutableStateFlow<Counter?>(null)
-    val counter: StateFlow<Counter?> = _counter
+    private val _selectedCounter = MutableStateFlow<Counter?>(null)
+    val selectedCounter: StateFlow<Counter?> = _selectedCounter
+
+    private val _counters = MutableStateFlow<List<Counter>?>(null)
+    val counters: StateFlow<List<Counter>?> = _counters
 
     init {
         viewModelScope.launch {
@@ -40,8 +43,14 @@ class CategoryViewModel @Inject constructor(
         viewModelScope.launch {
             category.collect {
                 it?.selectedCounter?.collect { counter ->
-                    _counter.emit(counter)
+                    _selectedCounter.emit(counter)
                 }
+            }
+        }
+
+        viewModelScope.launch {
+            repository.getAllCounters().collect {
+                _counters.emit(it)
             }
         }
     }
@@ -61,13 +70,12 @@ class CategoryViewModel @Inject constructor(
                 repository.insertBeverage(beverage)
             }
 
-            Logger.i(TAG, "saveCounter: Saving counter for '${beverage.name}' (id: ${beverage.id})")
-            repository.insertCounter(counter)
+            Logger.i(TAG, "saveCounter: Saving counter for '${beverage.name}' (id: ${counter.id}, value: ${counter.entries.size})")
+            repository.updateCounter(counter)
 
             val category = category.value
             
             if (category != null) {
-                Logger.d(TAG, "saveCounter: Emitting ${counter.beverage.name}")
                 category.selectedCounter.emit(counter)
                 repository.updateCategory(category.toGlobalDto())
             } else {
