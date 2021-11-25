@@ -86,6 +86,10 @@ class CategoryFragment(): ScopeFragment(), OnBackSupportFragment {
         launchWhenStarted {
             counterAdapter.counterHeight.collect {
                 bottomSheetBehavior.peekHeight = it
+                val params = binding.categoryImageView.layoutParams as ViewGroup.MarginLayoutParams
+                params.bottomMargin = it
+                binding.categoryImageView.layoutParams = params
+                binding.categoryImageView.requestLayout()
             }
         }
 
