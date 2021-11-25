@@ -1,18 +1,33 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Theme.Cheers" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_700</item>
-        <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+    <style name="Theme.Cheers.Base" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorToolbar">?colorPrimary</item>
+        <item name="android:statusBarColor" tools:targetApi="l">?colorToolbar</item>
+        <item name="colorOnToolbar">?colorOnPrimary</item>
 
-        <item name="colorSecondaryTransparent">#8803DAC5</item>
+        <item name="drawerArrowStyle">@style/Theme.Cheers.ArrowStyle</item>
+    </style>
+
+    <style name="Theme.Cheers.Base.Light" parent="Theme.Cheers.Base">
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnSecondary">@color/black</item>
+    </style>
+
+    <style name="Theme.Cheers.Default" parent="Theme.Cheers.Base.Light">
+        <item name="colorPrimary">@color/light_colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/light_colorPrimaryVariant</item>
+
+        <item name="colorSecondary">@color/light_colorSecondary</item>
+        <item name="colorSecondaryVariant">@color/light_colorSecondaryVariant</item>
+        <item name="colorSecondaryTransparent">@color/light_colorSecondaryTransparent</item>
+    </style>
+
+    <style name="Theme.Cheers.ArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">?colorOnToolbar</item>
+    </style>
+
+    <style name="Theme.Cheers.Splash" parent="Theme.SplashScreen">
+        <item name="postSplashScreenTheme">@style/Theme.Cheers.Default</item>
+        <item name="windowSplashScreenBackground">@color/light_colorPrimary</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/app_icon</item>
     </style>
 </resources>

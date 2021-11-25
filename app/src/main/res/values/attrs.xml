@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr name="colorSecondaryTransparent" type="color" />
+    <attr name="colorToolbar" format="color" />
+    <attr name="colorOnToolbar" format="color" />
+    <attr name="colorSecondaryTransparent" format="color" />
 </resources>
