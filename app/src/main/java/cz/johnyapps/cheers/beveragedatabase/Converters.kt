@@ -5,7 +5,7 @@ import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import cz.johnyapps.cheers.dto.Entry
+import cz.johnyapps.cheers.global.dto.Entry
 import cz.johnyapps.cheers.Sound
 
 object Converters {

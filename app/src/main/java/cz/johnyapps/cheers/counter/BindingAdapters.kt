@@ -3,8 +3,8 @@ package cz.johnyapps.cheers.counter
 import android.widget.EditText
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import cz.johnyapps.cheers.dto.Beverage
-import cz.johnyapps.cheers.dto.Entry
+import cz.johnyapps.cheers.global.dto.Beverage
+import cz.johnyapps.cheers.global.dto.Entry
 
 object BindingAdapters {
     @BindingAdapter("app:alcohol")

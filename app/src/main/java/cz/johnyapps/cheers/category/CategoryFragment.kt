@@ -13,7 +13,7 @@ import cz.johnyapps.cheers.ScopeFragment
 import cz.johnyapps.cheers.counter.CountersAdapter
 import cz.johnyapps.cheers.counter.NewCounterDialog
 import cz.johnyapps.cheers.databinding.FragmentCategoryBinding
-import cz.johnyapps.cheers.dto.Category
+import cz.johnyapps.cheers.global.dto.Category
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview

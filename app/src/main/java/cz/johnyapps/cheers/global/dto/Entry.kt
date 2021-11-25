@@ -1,4 +1,4 @@
-package cz.johnyapps.cheers.dto
+package cz.johnyapps.cheers.global.dto
 
 import java.util.*
 

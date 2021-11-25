@@ -1,8 +1,8 @@
 package cz.johnyapps.cheers.beveragerepository
 
-import cz.johnyapps.cheers.dto.Beverage
-import cz.johnyapps.cheers.dto.Category
-import cz.johnyapps.cheers.dto.Counter
+import cz.johnyapps.cheers.global.dto.Beverage
+import cz.johnyapps.cheers.global.dto.Category
+import cz.johnyapps.cheers.global.dto.Counter
 import kotlinx.coroutines.flow.Flow
 
 interface BeverageRepository {

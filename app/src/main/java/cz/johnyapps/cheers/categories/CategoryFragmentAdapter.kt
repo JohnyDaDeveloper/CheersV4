@@ -3,7 +3,7 @@ package cz.johnyapps.cheers.categories
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import cz.johnyapps.cheers.category.CategoryFragment
-import cz.johnyapps.cheers.dto.Category
+import cz.johnyapps.cheers.global.dto.Category
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 

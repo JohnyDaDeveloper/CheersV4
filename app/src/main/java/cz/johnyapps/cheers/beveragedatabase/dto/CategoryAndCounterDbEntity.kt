@@ -2,7 +2,7 @@ package cz.johnyapps.cheers.beveragedatabase.dto
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import cz.johnyapps.cheers.dto.Category
+import cz.johnyapps.cheers.global.dto.Category
 
 data class CategoryAndCounterDbEntity(
     @Embedded

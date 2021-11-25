@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import cz.johnyapps.cheers.R
 import cz.johnyapps.cheers.databinding.ItemCounterBinding
-import cz.johnyapps.cheers.dto.Counter
+import cz.johnyapps.cheers.global.dto.Counter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*

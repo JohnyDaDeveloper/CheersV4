@@ -1,4 +1,4 @@
-package cz.johnyapps.cheers.views
+package cz.johnyapps.cheers.global.views
 
 import android.content.Context
 import android.util.AttributeSet

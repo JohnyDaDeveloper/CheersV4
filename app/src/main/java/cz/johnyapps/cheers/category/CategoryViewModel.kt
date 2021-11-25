@@ -4,10 +4,10 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import cz.johnyapps.cheers.beveragerepository.BeverageRepository
-import cz.johnyapps.cheers.dto.Beverage
-import cz.johnyapps.cheers.dto.Category
-import cz.johnyapps.cheers.dto.Counter
-import cz.johnyapps.cheers.utils.Logger
+import cz.johnyapps.cheers.global.dto.Beverage
+import cz.johnyapps.cheers.global.dto.Category
+import cz.johnyapps.cheers.global.dto.Counter
+import cz.johnyapps.cheers.global.utils.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

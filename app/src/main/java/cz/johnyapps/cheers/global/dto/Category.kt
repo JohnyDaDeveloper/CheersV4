@@ -1,4 +1,4 @@
-package cz.johnyapps.cheers.dto
+package cz.johnyapps.cheers.global.dto
 
 import cz.johnyapps.cheers.Icon
 import cz.johnyapps.cheers.Sound

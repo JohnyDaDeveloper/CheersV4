@@ -3,9 +3,9 @@ package cz.johnyapps.cheers.beveragedatabase.dto
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import cz.johnyapps.cheers.dto.Beverage
-import cz.johnyapps.cheers.dto.Counter
-import cz.johnyapps.cheers.dto.Entry
+import cz.johnyapps.cheers.global.dto.Beverage
+import cz.johnyapps.cheers.global.dto.Counter
+import cz.johnyapps.cheers.global.dto.Entry
 
 @Entity(tableName = "counter_table")
 data class CounterDbEntity(

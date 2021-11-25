@@ -4,9 +4,9 @@ import cz.johnyapps.cheers.beveragedatabase.BeverageDatabase
 import cz.johnyapps.cheers.beveragedatabase.dto.BeverageDbEntity
 import cz.johnyapps.cheers.beveragedatabase.dto.CategoryDbEntity
 import cz.johnyapps.cheers.beveragedatabase.dto.CounterDbEntity
-import cz.johnyapps.cheers.dto.Beverage
-import cz.johnyapps.cheers.dto.Category
-import cz.johnyapps.cheers.dto.Counter
+import cz.johnyapps.cheers.global.dto.Beverage
+import cz.johnyapps.cheers.global.dto.Category
+import cz.johnyapps.cheers.global.dto.Counter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine

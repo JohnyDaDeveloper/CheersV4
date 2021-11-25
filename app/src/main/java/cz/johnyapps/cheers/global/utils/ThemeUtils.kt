@@ -1,4 +1,4 @@
-package cz.johnyapps.cheers.utils
+package cz.johnyapps.cheers.global.utils
 
 import android.content.Context
 import android.content.res.Configuration

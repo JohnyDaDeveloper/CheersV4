@@ -23,7 +23,7 @@
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
             android:text="@string/beverage_name_label" />
 
-        <cz.johnyapps.cheers.views.FlowAutoCompleteTextView
+        <cz.johnyapps.cheers.global.views.FlowAutoCompleteTextView
             android:id="@+id/beverageNameEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -120,6 +120,6 @@
     <data>
         <variable
             name="beverage"
-            type="cz.johnyapps.cheers.dto.Beverage" />
+            type="cz.johnyapps.cheers.global.dto.Beverage" />
     </data>
 </layout>

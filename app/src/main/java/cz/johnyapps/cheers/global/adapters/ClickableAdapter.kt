@@ -1,11 +1,11 @@
-package cz.johnyapps.cheers.adapters
+package cz.johnyapps.cheers.global.adapters
 
 import android.view.View
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import cz.johnyapps.cheers.utils.clicks
+import cz.johnyapps.cheers.global.utils.clicks
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

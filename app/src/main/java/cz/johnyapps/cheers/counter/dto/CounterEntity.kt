@@ -1,9 +1,9 @@
 package cz.johnyapps.cheers.counter.dto
 
-import cz.johnyapps.cheers.dto.Beverage
-import cz.johnyapps.cheers.dto.Counter
-import cz.johnyapps.cheers.dto.Entry
-import cz.johnyapps.cheers.utils.TextUtils
+import cz.johnyapps.cheers.global.dto.Beverage
+import cz.johnyapps.cheers.global.dto.Counter
+import cz.johnyapps.cheers.global.dto.Entry
+import cz.johnyapps.cheers.global.utils.TextUtils
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.*
 

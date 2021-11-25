@@ -1,4 +1,4 @@
-package cz.johnyapps.cheers.dto
+package cz.johnyapps.cheers.global.dto
 
 data class Counter(
     var id: Long, //TODO Change to val

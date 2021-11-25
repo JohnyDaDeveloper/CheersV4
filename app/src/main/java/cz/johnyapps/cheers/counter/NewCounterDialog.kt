@@ -12,12 +12,12 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import cz.johnyapps.cheers.itemwithid.ItemsWithIdAdapter
-import cz.johnyapps.cheers.utils.Logger
+import cz.johnyapps.cheers.global.utils.Logger
 import cz.johnyapps.cheers.R
 import cz.johnyapps.cheers.databinding.DialogNewCounterBinding
-import cz.johnyapps.cheers.dto.Beverage
-import cz.johnyapps.cheers.dto.Counter
-import cz.johnyapps.cheers.utils.ThemeUtils
+import cz.johnyapps.cheers.global.dto.Beverage
+import cz.johnyapps.cheers.global.dto.Counter
+import cz.johnyapps.cheers.global.utils.ThemeUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import cz.johnyapps.cheers.Icon
-import cz.johnyapps.cheers.dto.Category
+import cz.johnyapps.cheers.global.dto.Category
 import cz.johnyapps.cheers.Sound
 
 @Entity(tableName = "category_table")

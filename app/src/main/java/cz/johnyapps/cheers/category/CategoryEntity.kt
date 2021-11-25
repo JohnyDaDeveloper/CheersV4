@@ -1,8 +1,8 @@
 package cz.johnyapps.cheers.category
 
 import cz.johnyapps.cheers.Icon
-import cz.johnyapps.cheers.dto.Category
-import cz.johnyapps.cheers.dto.Counter
+import cz.johnyapps.cheers.global.dto.Category
+import cz.johnyapps.cheers.global.dto.Counter
 import cz.johnyapps.cheers.Sound
 import kotlinx.coroutines.flow.MutableStateFlow
 

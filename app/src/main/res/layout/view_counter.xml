@@ -68,6 +68,6 @@
 
         <variable
             name="counterEntries"
-            type="java.util.List&lt;cz.johnyapps.cheers.dto.Entry>" />
+            type="java.util.List&lt;cz.johnyapps.cheers.global.dto.Entry>" />
     </data>
 </layout>

@@ -3,11 +3,11 @@ package cz.johnyapps.cheers.counter
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import cz.johnyapps.cheers.utils.Logger
+import cz.johnyapps.cheers.global.utils.Logger
 import cz.johnyapps.cheers.beveragerepository.BeverageRepository
 import cz.johnyapps.cheers.counter.dto.CounterEntity
-import cz.johnyapps.cheers.dto.Counter
-import cz.johnyapps.cheers.dto.Entry
+import cz.johnyapps.cheers.global.dto.Counter
+import cz.johnyapps.cheers.global.dto.Entry
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
