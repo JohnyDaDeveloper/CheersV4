@@ -5,10 +5,9 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
 import cz.johnyapps.cheers.R
 import cz.johnyapps.cheers.databinding.ItemCounterBinding
+import cz.johnyapps.cheers.global.adapters.SelectableAdapter
 import cz.johnyapps.cheers.global.dto.Counter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -19,7 +18,7 @@ import kotlinx.coroutines.launch
 @FlowPreview
 class CountersAdapter(
     private val lifecycleScope: LifecycleCoroutineScope
-): ListAdapter<Counter, CountersAdapter.CountersViewHolder>(DIFF_CALL) {
+): SelectableAdapter<Counter, CountersAdapter.CountersViewHolder>(DIFF_CALL, lifecycleScope) {
     private val _counterUpdate = MutableSharedFlow<Counter>()
     val counterUpdate: SharedFlow<Counter> = _counterUpdate
 
@@ -30,7 +29,7 @@ class CountersAdapter(
         setHasStableIds(true)
     }
 
-    override fun onBindViewHolder(holder: CountersViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CountersViewHolder, position: Int, selected: Boolean) {
         lifecycleScope.launch {
             holder.binding.counterView.setCounter(getItem(position))
 
@@ -48,8 +47,12 @@ class CountersAdapter(
         }
     }
 
+    override fun getItemId(item: Counter): Long {
+        return item.id
+    }
+
     override fun getItemId(position: Int): Long {
-        return position.toLong()
+        return getItem(position).id
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CountersViewHolder {
@@ -63,7 +66,7 @@ class CountersAdapter(
 
     open inner class CountersViewHolder(
         val binding: ItemCounterBinding
-    ): RecyclerView.ViewHolder(binding.root)
+    ): SelectableAdapter<Counter, CountersViewHolder>.SelectableViewHolder(binding.root)
 
     companion object {
         private val DIFF_CALL = object : DiffUtil.ItemCallback<Counter>() {

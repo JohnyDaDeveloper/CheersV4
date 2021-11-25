@@ -26,3 +26,17 @@ fun View.clicks(scope: CoroutineScope) = callbackFlow {
 
     awaitClose { setOnClickListener(null) }
 }
+
+@ExperimentalCoroutinesApi
+fun View.longClicks(scope: CoroutineScope) = callbackFlow {
+    setOnLongClickListener { v ->
+        scope.launch {
+            send(v)
+        }
+
+        true
+    }
+
+    awaitClose { setOnLongClickListener(null) }
+}
+

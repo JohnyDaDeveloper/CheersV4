@@ -1,8 +1,10 @@
 package cz.johnyapps.cheers.global.adapters
 
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.recyclerview.widget.DiffUtil
+import cz.johnyapps.cheers.R
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
@@ -23,13 +25,17 @@ abstract class SelectableAdapter<T, VH: SelectableAdapter<T, VH>.SelectableViewH
         }
 
         lifecycleScope.launchWhenCreated {
-            rootClickFlow.collect {
-                selectedItem.emit(OldAndNew(selectedItem.value.newItem, it))
+            rootClick.collect {
+                if (isSelecting()) {
+                    selectNewItem(it)
+                }
             }
         }
 
         lifecycleScope.launchWhenCreated {
-            selectedItem.emit(OldAndNew(selectedItem.value.newItem, rootClickFlow.value))
+            rootLongClick.collect {
+                selectNewItem(it)
+            }
         }
     }
 
@@ -38,25 +44,38 @@ abstract class SelectableAdapter<T, VH: SelectableAdapter<T, VH>.SelectableViewH
         val selectedItem = this.selectedItem.value.newItem
         var selected = false
 
-        /*if (selectedItem != null && getItemId(selectedItem) == getItemId(item)) {
-            holder.itemView.setBackgroundResource(R.drawable.selected_item_background)
+        if (selectedItem != null && getItemId(selectedItem) == getItemId(item)) {
+            holder.itemView.foreground = ContextCompat.getDrawable(holder.itemView.context, R.drawable.selected_item_background)
             selected = true
         } else {
-            holder.itemView.background = null
-        }*/
+            holder.itemView.foreground = null
+        }
 
         onBindViewHolder(holder, position, selected)
     }
 
+    private suspend fun selectNewItem(item: T?) {
+        selectedItem.emit(OldAndNew(selectedItem.value.newItem, item))
+    }
+
+    private fun isSelecting(): Boolean {
+        return selectedItem.value.newItem != null
+    }
+
     fun select(item: T?) {
         lifecycleScope.launch {
-            selectedItem.emit(OldAndNew(selectedItem.value.newItem, item))
+            selectNewItem(item)
         }
     }
 
-    private fun changeSelection(oldItem: T?, newItem: T?) {
-        /*oldItem?.let { notifyItemChanged(getItemPosition(oldItem)) }
-        newItem?.let { notifyItemChanged(getItemPosition(newItem)) }*/
+    private suspend fun changeSelection(oldItem: T?, newItem: T?) {
+        if (newItem == oldItem) {
+            selectNewItem(null)
+            return
+        }
+
+        oldItem?.let { notifyItemChanged(getItemPosition(oldItem)) }
+        newItem?.let { notifyItemChanged(getItemPosition(newItem)) }
     }
 
     private fun getItemPosition(item: T): Int {
