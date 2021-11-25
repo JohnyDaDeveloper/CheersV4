@@ -3,9 +3,9 @@ package cz.johnyapps.cheers.beveragedatabase.dto
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import cz.johnyapps.cheers.Icon
+import cz.johnyapps.cheers.global.enums.Icon
 import cz.johnyapps.cheers.global.dto.Category
-import cz.johnyapps.cheers.Sound
+import cz.johnyapps.cheers.global.enums.Sound
 
 @Entity(tableName = "category_table")
 data class CategoryDbEntity(

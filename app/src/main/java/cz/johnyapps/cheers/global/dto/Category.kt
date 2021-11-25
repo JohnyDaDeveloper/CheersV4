@@ -1,7 +1,7 @@
 package cz.johnyapps.cheers.global.dto
 
-import cz.johnyapps.cheers.Icon
-import cz.johnyapps.cheers.Sound
+import cz.johnyapps.cheers.global.enums.Icon
+import cz.johnyapps.cheers.global.enums.Sound
 
 data class Category(
     val id: Long,

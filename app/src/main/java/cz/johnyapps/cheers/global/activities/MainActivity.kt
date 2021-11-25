@@ -1,12 +1,17 @@
-package cz.johnyapps.cheers
+package cz.johnyapps.cheers.global.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import cz.johnyapps.cheers.global.enums.Icon
+import cz.johnyapps.cheers.R
+import cz.johnyapps.cheers.global.enums.Sound
 import cz.johnyapps.cheers.beveragedatabase.BeverageDatabase
 import cz.johnyapps.cheers.beveragedatabase.dto.CategoryDbEntity
 import cz.johnyapps.cheers.databinding.ActivityMainBinding
+import cz.johnyapps.cheers.global.fragments.OnBackSupportFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -51,6 +56,14 @@ class MainActivity : AppCompatActivity() {
                 0,
                 2
             ))
+        }
+    }
+
+    override fun onBackPressed() {
+        val fragment: Fragment = binding.navHostFragment.getFragment()
+
+        if (fragment !is OnBackSupportFragment || !fragment.onBackPressed()) {
+            super.onBackPressed()
         }
     }
 }

@@ -12,14 +12,17 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import cz.johnyapps.cheers.R
 import cz.johnyapps.cheers.databinding.FragmentCategoriesBinding
+import cz.johnyapps.cheers.global.fragments.OnBackSupportFragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 @FlowPreview
-class CategoriesFragment: Fragment() {
+@ExperimentalCoroutinesApi
+class CategoriesFragment: Fragment(), OnBackSupportFragment {
     private lateinit var binding: FragmentCategoriesBinding
     private lateinit var adapter: CategoryFragmentAdapter
     private val viewModel: CategoriesViewModel by viewModels()
@@ -45,5 +48,10 @@ class CategoriesFragment: Fragment() {
         binding.viewPager.adapter = adapter
 
         return binding.root
+    }
+
+    override fun onBackPressed(): Boolean {
+        val fragment = adapter.getFragment(binding.viewPager.currentItem)
+        return fragment is OnBackSupportFragment && fragment.onBackPressed()
     }
 }

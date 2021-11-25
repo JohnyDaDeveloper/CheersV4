@@ -6,7 +6,7 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import cz.johnyapps.cheers.global.dto.Entry
-import cz.johnyapps.cheers.Sound
+import cz.johnyapps.cheers.global.enums.Sound
 
 object Converters {
     private val moshi = buildMoshi()

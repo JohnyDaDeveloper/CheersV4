@@ -9,11 +9,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import cz.johnyapps.cheers.R
-import cz.johnyapps.cheers.ScopeFragment
+import cz.johnyapps.cheers.global.fragments.ScopeFragment
 import cz.johnyapps.cheers.counter.CountersAdapter
 import cz.johnyapps.cheers.counter.NewCounterDialog
 import cz.johnyapps.cheers.databinding.FragmentCategoryBinding
 import cz.johnyapps.cheers.global.dto.Category
+import cz.johnyapps.cheers.global.fragments.OnBackSupportFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -24,7 +25,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 @FlowPreview
 @ExperimentalCoroutinesApi
-class CategoryFragment(): ScopeFragment() {
+class CategoryFragment(): ScopeFragment(), OnBackSupportFragment {
     private lateinit var binding: FragmentCategoryBinding
     private val viewModel: CategoryViewModel by viewModels()
     private var category: Category? = null
@@ -131,6 +132,16 @@ class CategoryFragment(): ScopeFragment() {
             viewModel.category.collect { category ->
                 binding.category = category
             }
+        }
+    }
+
+    override fun onBackPressed(): Boolean {
+        return if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED ||
+            bottomSheetBehavior.state == BottomSheetBehavior.STATE_HALF_EXPANDED) {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+            true
+        } else {
+            false
         }
     }
 }

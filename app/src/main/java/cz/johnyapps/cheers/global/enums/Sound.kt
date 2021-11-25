@@ -1,6 +1,7 @@
-package cz.johnyapps.cheers
+package cz.johnyapps.cheers.global.enums
 
 import androidx.annotation.RawRes
+import cz.johnyapps.cheers.R
 
 enum class Sound(
     @RawRes val soundId: Int

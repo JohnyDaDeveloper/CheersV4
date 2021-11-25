@@ -1,6 +1,7 @@
-package cz.johnyapps.cheers
+package cz.johnyapps.cheers.global.enums
 
 import androidx.annotation.DrawableRes
+import cz.johnyapps.cheers.R
 
 enum class Icon(
     @DrawableRes val iconId: Int

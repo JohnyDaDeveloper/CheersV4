@@ -1,9 +1,9 @@
 package cz.johnyapps.cheers.category
 
-import cz.johnyapps.cheers.Icon
+import cz.johnyapps.cheers.global.enums.Icon
 import cz.johnyapps.cheers.global.dto.Category
 import cz.johnyapps.cheers.global.dto.Counter
-import cz.johnyapps.cheers.Sound
+import cz.johnyapps.cheers.global.enums.Sound
 import kotlinx.coroutines.flow.MutableStateFlow
 
 data class CategoryEntity(

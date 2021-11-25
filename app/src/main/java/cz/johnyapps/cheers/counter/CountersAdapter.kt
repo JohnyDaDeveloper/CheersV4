@@ -26,6 +26,10 @@ class CountersAdapter(
     private val _counterHeight = MutableStateFlow(0)
     val counterHeight: StateFlow<Int> = _counterHeight
 
+    init {
+        setHasStableIds(true)
+    }
+
     override fun onBindViewHolder(holder: CountersViewHolder, position: Int) {
         lifecycleScope.launch {
             holder.binding.counterView.setCounter(getItem(position))

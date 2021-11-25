@@ -1,4 +1,4 @@
-package cz.johnyapps.cheers
+package cz.johnyapps.cheers.global.fragments
 
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle

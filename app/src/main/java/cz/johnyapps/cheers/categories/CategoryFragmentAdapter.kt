@@ -13,14 +13,24 @@ class CategoryFragmentAdapter(
     parentFragment: Fragment
 ): FragmentStateAdapter(parentFragment) {
     private val categories: MutableList<Category> = ArrayList()
+    private val fragments = ArrayList<Fragment>()
 
     override fun getItemCount(): Int {
         return categories.size
     }
 
-
     override fun createFragment(position: Int): Fragment {
-        return CategoryFragment(categories[position])
+        val fragment = CategoryFragment(categories[position])
+        fragments.add(fragment)
+        return fragment
+    }
+
+    fun getFragment(pos: Int): Fragment? {
+        return if (pos < fragments.size && pos >= 0) {
+            fragments[pos]
+        } else {
+            null
+        }
     }
 
     fun submitList(list: List<Category>) {
