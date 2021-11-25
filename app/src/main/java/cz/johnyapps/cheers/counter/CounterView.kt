@@ -21,9 +21,14 @@ import kotlinx.coroutines.launch
 class CounterView: LinearLayoutCompat {
     private val counter = MutableStateFlow<CounterEntity?>(null)
     private val count = MutableStateFlow<List<Entry>>(ArrayList())
+    private val jobList = ArrayList<Job>()
+
     private val _counterUpdate = MutableSharedFlow<Counter>()
     val counterUpdate: SharedFlow<Counter> = _counterUpdate
-    private val jobList = ArrayList<Job>()
+
+    private val _height = MutableStateFlow(0)
+    val height: StateFlow<Int> = _height
+
     private var binding: ViewCounterBinding = DataBindingUtil.inflate(
         LayoutInflater.from(context),
         R.layout.view_counter,
@@ -31,11 +36,14 @@ class CounterView: LinearLayoutCompat {
         true
     )
 
-    private var ignoreNextList = false
-
     constructor(context: Context): super(context)
     constructor(context: Context, attrs: AttributeSet): super(context, attrs)
     constructor(context: Context, attrs: AttributeSet, defStyle: Int): super(context, attrs, defStyle)
+
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+        _height.value = h
+    }
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
@@ -50,7 +58,6 @@ class CounterView: LinearLayoutCompat {
                         if (it == null) {
                             count.emit(ArrayList())
                         } else {
-                            ignoreNextList = true
                             it.entries.collect { list ->
                                 count.emit(list)
                             }
@@ -84,17 +91,21 @@ class CounterView: LinearLayoutCompat {
             lifecycleOwner.lifecycleScope.launch {
                 lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                     count.collect {
-                        if (!ignoreNextList) {
-                            val counter = this@CounterView.counter.value
-
-                            counter?.let {
-                                _counterUpdate.emit(counter.toGlobalDto())
-                            }
-                        } else {
-                            ignoreNextList = false
-                        }
-
                         binding.counterEntries = it
+                    }
+                }
+            }
+        )
+
+        jobList.add(
+            lifecycleOwner.lifecycleScope.launch {
+                lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    count.drop(1).collect {
+                        val counter = this@CounterView.counter.value
+
+                        counter?.let {
+                            _counterUpdate.emit(counter.toGlobalDto())
+                        }
                     }
                 }
             }
@@ -110,9 +121,5 @@ class CounterView: LinearLayoutCompat {
 
     suspend fun setCounter(counter: Counter) {
         this.counter.emit(CounterEntity(counter))
-    }
-
-    companion object {
-        private const val TAG = "CounterView"
     }
 }

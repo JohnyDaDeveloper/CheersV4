@@ -12,9 +12,7 @@ import cz.johnyapps.cheers.databinding.ItemCounterBinding
 import cz.johnyapps.cheers.dto.Counter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
@@ -25,6 +23,9 @@ class CountersAdapter(
     private val _counterUpdate = MutableSharedFlow<Counter>()
     val counterUpdate: SharedFlow<Counter> = _counterUpdate
 
+    private val _counterHeight = MutableStateFlow(0)
+    val counterHeight: StateFlow<Int> = _counterHeight
+
     override fun onBindViewHolder(holder: CountersViewHolder, position: Int) {
         lifecycleScope.launch {
             holder.binding.counterView.setCounter(getItem(position))
@@ -32,6 +33,14 @@ class CountersAdapter(
             holder.binding.counterView.counterUpdate.collect {
                 _counterUpdate.emit(it)
             }
+        }
+
+        lifecycleScope.launch {
+            holder.binding.counterView.height
+                .filter { it > 0 }
+                .collect {
+                    _counterHeight.emit(it)
+                }
         }
     }
 

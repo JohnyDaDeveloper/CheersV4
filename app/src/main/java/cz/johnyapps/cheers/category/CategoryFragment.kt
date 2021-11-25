@@ -4,14 +4,12 @@ import android.os.Bundle
 import android.view.*
 import android.widget.FrameLayout
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import cz.johnyapps.cheers.R
+import cz.johnyapps.cheers.ScopeFragment
 import cz.johnyapps.cheers.counter.CountersAdapter
 import cz.johnyapps.cheers.counter.NewCounterDialog
 import cz.johnyapps.cheers.databinding.FragmentCategoryBinding
@@ -26,7 +24,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 @FlowPreview
 @ExperimentalCoroutinesApi
-class CategoryFragment(): Fragment() {
+class CategoryFragment(): ScopeFragment() {
     private lateinit var binding: FragmentCategoryBinding
     private val viewModel: CategoryViewModel by viewModels()
     private var category: Category? = null
@@ -36,7 +34,6 @@ class CategoryFragment(): Fragment() {
     constructor(category: Category): this() {
         this.category = category
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -79,19 +76,21 @@ class CategoryFragment(): Fragment() {
         binding.countersRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.countersRecyclerView.adapter = counterAdapter
 
-        lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.counters.collect {
-                    counterAdapter.submitList(it)
-                }
+        launchWhenStarted {
+            viewModel.counters.collect {
+                counterAdapter.submitList(it)
             }
         }
 
-        lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                counterAdapter.counterUpdate.debounce(500L).collect {
-                    viewModel.saveCounter(it)
-                }
+        launchWhenStarted {
+            counterAdapter.counterHeight.collect {
+                bottomSheetBehavior.peekHeight = it
+            }
+        }
+
+        launchWhenStarted {
+            counterAdapter.counterUpdate.debounce(500L).collect {
+                viewModel.saveCounter(it)
             }
         }
     }
@@ -133,9 +132,5 @@ class CategoryFragment(): Fragment() {
                 binding.category = category
             }
         }
-    }
-
-    companion object {
-        private const val TAG = "CategoryFragment"
     }
 }
