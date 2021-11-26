@@ -166,7 +166,7 @@ class CategoryFragment(): ScopeFragment(), OnBackSupportFragment {
         bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheet)
         bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
-
+                counterAdapter.setAllowSelection(newState != BottomSheetBehavior.STATE_COLLAPSED)
             }
 
             override fun onSlide(bottomSheet: View, slideOffset: Float) {

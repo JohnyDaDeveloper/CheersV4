@@ -16,27 +16,38 @@ abstract class SelectableAdapter<T, VH: SelectableAdapter<T, VH>.SelectableViewH
     diffCallback: DiffUtil.ItemCallback<T>,
     private val lifecycleScope: LifecycleCoroutineScope
 ): ClickableAdapter<T, VH>(diffCallback, lifecycleScope) {
-    private var _selectedItem = MutableStateFlow(OldAndNew<T>(null, null))
+    private val _selectedItem = MutableStateFlow(OldAndNew<T>(null, null))
     val selectedItem: StateFlow<OldAndNew<T>> = _selectedItem
 
+    private val _allowSelection = MutableStateFlow(true)
+    val allowSelection: StateFlow<Boolean> = _allowSelection
+
     init {
-        lifecycleScope.launchWhenCreated {
+        lifecycleScope.launch {
             _selectedItem.collect {
                 updateSelection(it.oldItem, it.newItem)
             }
         }
 
-        lifecycleScope.launchWhenCreated {
+        lifecycleScope.launch {
             rootClick.collect {
                 if (isSelecting()) {
-                    selectNewItem(it)
+                    select(it)
                 }
             }
         }
 
-        lifecycleScope.launchWhenCreated {
+        lifecycleScope.launch {
             rootLongClick.collect {
-                selectNewItem(it)
+                select(it)
+            }
+        }
+
+        lifecycleScope.launch {
+            allowSelection.collect {
+                if (!it) {
+                    cancelSelection()
+                }
             }
         }
     }
@@ -65,23 +76,25 @@ abstract class SelectableAdapter<T, VH: SelectableAdapter<T, VH>.SelectableViewH
         super.submitList(list, commitCallback)
     }
 
-    private suspend fun selectNewItem(item: T?) {
-        _selectedItem.emit(OldAndNew(_selectedItem.value.newItem, item))
-    }
-
     private fun isSelecting(): Boolean {
         return _selectedItem.value.newItem != null
     }
 
     fun select(item: T?) {
-        lifecycleScope.launch {
-            selectNewItem(item)
+        if (allowSelection.value || item == null) {
+            lifecycleScope.launch {
+                _selectedItem.emit(OldAndNew(_selectedItem.value.newItem, item))
+            }
         }
     }
 
     fun cancelSelection() {
+        select(null)
+    }
+
+    fun setAllowSelection(allow: Boolean) {
         lifecycleScope.launch {
-            selectNewItem(null)
+            _allowSelection.emit(allow)
         }
     }
 
