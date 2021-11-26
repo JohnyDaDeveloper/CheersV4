@@ -6,30 +6,20 @@ import cz.johnyapps.cheers.global.dto.Category
 
 data class CategoryAndCounterDbEntity(
     @Embedded
-    val counter: CounterDbEntity,
+    val category: CategoryDbEntity,
     @Relation(
-        parentColumn = "counter_id",
-        entityColumn = "selected_counter_id"
+        parentColumn = "selected_counter_id",
+        entityColumn = "counter_id",
+        entity = CounterDbEntity::class
     )
-    val category: CategoryDbEntity?,
-    @Relation(
-        parentColumn = "beverage_id",
-        entityColumn = "beverage_id"
-    )
-    val beverage: BeverageDbEntity
+    val counter: CounterAndBeverageDbEntity?
 ) {
-    fun toGlobalDto(): Category? {
-        return if (category == null) {
-            null
-        } else {
-            Category(
-                category.id,
-                category.name,
-                category.icon,
-                category.sounds,
-                counter.toGlobalDto(beverage.toGlobalDto()),
-                category.order
-            )
-        }
-    }
+    fun toGlobalDto(): Category = Category(
+        category.id,
+        category.name,
+        category.icon,
+        category.sounds,
+        counter?.toGlobalDto(),
+        category.order
+    )
 }

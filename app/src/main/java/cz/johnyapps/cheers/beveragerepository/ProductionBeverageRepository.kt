@@ -9,7 +9,6 @@ import cz.johnyapps.cheers.global.dto.Category
 import cz.johnyapps.cheers.global.dto.Counter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 
 @ExperimentalCoroutinesApi
@@ -21,25 +20,8 @@ class ProductionBeverageRepository(
     }
 
     override fun getAllCategories(): Flow<List<Category>> {
-        val withCounters = database.categoryDao().getAllWithCounters()
-            .map { list ->
-                list.filter { category -> category.category != null }.map { category ->
-                    category.toGlobalDto() as Category
-                }
-            }
-
-        val withoutCounters = database.categoryDao().getAllWithoutCounters().map {
-            it.map { category ->
-                category.toGlobalDto()
-            }
-        }
-
-        return withCounters.combine(withoutCounters) { a, b ->
-            val mutableA = a.toMutableList()
-            mutableA.addAll(b)
-            mutableA.sort()
-            mutableA
-        }
+        return database.categoryDao().getAllWithCounters()
+            .map { list -> list.map { category -> category.toGlobalDto() } }
     }
 
     override fun updateCategory(category: Category) {
