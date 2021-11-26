@@ -1,9 +1,11 @@
 package cz.johnyapps.cheers.main
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import androidx.appcompat.widget.Toolbar
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.databinding.DataBindingUtil
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import cz.johnyapps.cheers.global.enums.Icon
@@ -12,14 +14,16 @@ import cz.johnyapps.cheers.global.enums.Sound
 import cz.johnyapps.cheers.beveragedatabase.BeverageDatabase
 import cz.johnyapps.cheers.beveragedatabase.dto.CategoryDbEntity
 import cz.johnyapps.cheers.databinding.ActivityMainBinding
+import cz.johnyapps.cheers.global.activities.NavigationActivity
 import cz.johnyapps.cheers.global.fragments.OnBackSupportFragment
+import cz.johnyapps.cheers.global.utils.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : NavigationActivity() {
     private lateinit var binding: ActivityMainBinding
 
     @Inject
@@ -27,11 +31,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        installSplashScreen()
-
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        this.setSupportActionBar(binding.toolbar)
 
         lifecycleScope.launch(Dispatchers.IO) {
             database.categoryDao().insert(CategoryDbEntity(
@@ -63,7 +62,25 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun getToolbar(): Toolbar {
+        return binding.toolbar
+    }
+
+    override fun beforeSetContentView() {
+        installSplashScreen()
+    }
+
+    override fun setContentView() {
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        this.setSupportActionBar(binding.toolbar)
+    }
+
+    override fun getDrawerLayout(): DrawerLayout {
+        return binding.drawerLayout
+    }
+
     override fun onBackPressed() {
+        //TODO: Fix after navigation implementation
         val fragment: Fragment = binding.navHostFragment.getFragment()
 
         if (fragment !is OnBackSupportFragment || !fragment.onBackPressed()) {
