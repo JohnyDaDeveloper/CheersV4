@@ -14,7 +14,6 @@ import cz.johnyapps.cheers.counter.CountersAdapter
 import cz.johnyapps.cheers.counter.dialogs.DeleteCountersDialog
 import cz.johnyapps.cheers.counter.dialogs.NewCounterDialog
 import cz.johnyapps.cheers.counter.dialogs.StopCountersDialog
-import cz.johnyapps.cheers.counter.dto.CounterEntity
 import cz.johnyapps.cheers.databinding.FragmentCategoryBinding
 import cz.johnyapps.cheers.global.dto.Category
 import cz.johnyapps.cheers.global.dto.Counter
@@ -23,7 +22,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
@@ -83,13 +81,13 @@ class CategoryFragment(): ScopeFragment(), OnBackSupportFragment {
 
             R.id.stopCounterMenuItem -> {
                 val counters = viewModel.listSelectedCounter.value
-                counters?.let { showStopCountersDialog(listOf(counters)) }
+                counters?.let { showStopCountersDialog(listOf(counters.toGlobalDto())) }
                 true
             }
 
             R.id.deleteCounterMenuItem -> {
                 val counters = viewModel.listSelectedCounter.value
-                counters?.let { showDeleteCountersDialog(listOf(counters)) }
+                counters?.let { showDeleteCountersDialog(listOf(counters.toGlobalDto())) }
                 true
             }
 
@@ -121,10 +119,11 @@ class CategoryFragment(): ScopeFragment(), OnBackSupportFragment {
         binding.countersRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.countersRecyclerView.adapter = counterAdapter
 
-        viewModel.collectSelectedCounters(counterAdapter.selectedItem.map { it.newItem?.toGlobalDto() })
+        viewModel.collectSelectedCounters(counterAdapter.selectedItem.map { it.newItem })
+        viewModel.collectCounterUpdate(counterAdapter.counterUpdate)
 
         launchWhenStarted {
-            viewModel.counters.map { it?.map { counter -> CounterEntity(counter) } }.collect {
+            viewModel.counters.collect {
                 counterAdapter.submitList(it)
             }
         }
@@ -136,12 +135,6 @@ class CategoryFragment(): ScopeFragment(), OnBackSupportFragment {
                 params.bottomMargin = it
                 binding.categoryImageView.layoutParams = params
                 binding.categoryImageView.requestLayout()
-            }
-        }
-
-        launchWhenStarted {
-            counterAdapter.counterUpdate.debounce(500L).collect {
-                viewModel.saveCounter(it.toGlobalDto())
             }
         }
 
@@ -184,9 +177,15 @@ class CategoryFragment(): ScopeFragment(), OnBackSupportFragment {
     }
 
     private fun setupCategory() {
-        lifecycleScope.launchWhenStarted {
+        launchWhenStarted {
             viewModel.category.collect { category ->
                 binding.category = category
+            }
+        }
+
+        launchWhenStarted {
+            viewModel.categorySelectedCounter.collect {
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
             }
         }
     }

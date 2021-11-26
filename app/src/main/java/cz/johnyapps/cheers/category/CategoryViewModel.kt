@@ -4,20 +4,20 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import cz.johnyapps.cheers.beveragerepository.BeverageRepository
+import cz.johnyapps.cheers.counter.dto.CounterEntity
 import cz.johnyapps.cheers.global.dto.Beverage
 import cz.johnyapps.cheers.global.dto.Category
 import cz.johnyapps.cheers.global.dto.Counter
 import cz.johnyapps.cheers.global.utils.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
+@FlowPreview
 class CategoryViewModel @Inject constructor(
     application: Application,
     private val repository: BeverageRepository
@@ -28,14 +28,14 @@ class CategoryViewModel @Inject constructor(
     private val _beverages = MutableStateFlow<List<Beverage>?>(null)
     val beverages: StateFlow<List<Beverage>?> = _beverages
 
-    private val _categorySelectedCounter = MutableStateFlow<Counter?>(null)
-    val categorySelectedCounter: StateFlow<Counter?> = _categorySelectedCounter
+    private val _categorySelectedCounter = MutableStateFlow<CounterEntity?>(null)
+    val categorySelectedCounter: StateFlow<CounterEntity?> = _categorySelectedCounter
 
-    private val _listSelectedCounter = MutableStateFlow<Counter?>(null)
-    val listSelectedCounter: StateFlow<Counter?> = _listSelectedCounter
+    private val _listSelectedCounter = MutableStateFlow<CounterEntity?>(null)
+    val listSelectedCounter: StateFlow<CounterEntity?> = _listSelectedCounter
 
-    private val _counters = MutableStateFlow<List<Counter>?>(null)
-    val counters: StateFlow<List<Counter>?> = _counters
+    private val _counters = MutableStateFlow<List<CounterEntity>?>(null)
+    val counters: StateFlow<List<CounterEntity>?> = _counters
 
     init {
         viewModelScope.launch {
@@ -46,14 +46,18 @@ class CategoryViewModel @Inject constructor(
 
         viewModelScope.launch {
             category.collect {
-                it?.selectedCounter?.collect { counter ->
+                it?.selectedCounter?.map { counter ->
+                    counter?.let { CounterEntity(counter) }
+                }?.collect { counter ->
                     _categorySelectedCounter.emit(counter)
                 }
             }
         }
 
         viewModelScope.launch {
-            repository.getAllCounters().collect {
+            repository.getAllCounters().map {
+                it.map { counter -> CounterEntity(counter) }
+            }.collect {
                 _counters.emit(it)
             }
         }
@@ -67,6 +71,20 @@ class CategoryViewModel @Inject constructor(
         viewModelScope.launch {
             counters.collect {
                 moveCounterToTop(categorySelectedCounter.value, it)
+            }
+        }
+    }
+
+    fun collectCounterUpdate(counter: Flow<CounterEntity>) {
+        viewModelScope.launch {
+            counter.debounce(500L).collect {
+                saveCounter(it.toGlobalDto())
+            }
+        }
+
+        viewModelScope.launch {
+            counter.collect {
+                _categorySelectedCounter.emit(it)
             }
         }
     }
@@ -86,7 +104,7 @@ class CategoryViewModel @Inject constructor(
         }
     }
 
-    fun collectSelectedCounters(counter: Flow<Counter?>) {
+    fun collectSelectedCounters(counter: Flow<CounterEntity?>) {
         viewModelScope.launch {
             counter.collect {
                 _listSelectedCounter.emit(it)
@@ -128,7 +146,7 @@ class CategoryViewModel @Inject constructor(
         }
     }
 
-    private suspend fun moveCounterToTop(counter: Counter?, counters: List<Counter>?) {
+    private suspend fun moveCounterToTop(counter: CounterEntity?, counters: List<CounterEntity>?) {
         if (counter != null && counters != null && counters.isNotEmpty()) {
             if (counters.first().id != counter.id) {
                 val mutableCounters = counters.toMutableList()
@@ -147,7 +165,7 @@ class CategoryViewModel @Inject constructor(
         }
     }
 
-    private fun findCounterIndex(counter: Counter, counters: List<Counter>): Int {
+    private fun findCounterIndex(counter: CounterEntity, counters: List<CounterEntity>): Int {
         counters.forEachIndexed { index, it ->
             if (counter.id == it.id) {
                 return index

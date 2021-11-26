@@ -9,7 +9,6 @@ import androidx.lifecycle.*
 import cz.johnyapps.cheers.R
 import cz.johnyapps.cheers.counter.dto.CounterEntity
 import cz.johnyapps.cheers.databinding.ViewCounterBinding
-import cz.johnyapps.cheers.global.dto.Counter
 import cz.johnyapps.cheers.global.dto.Entry
 import cz.johnyapps.cheers.global.utils.clicks
 import kotlinx.coroutines.ExperimentalCoroutinesApi
