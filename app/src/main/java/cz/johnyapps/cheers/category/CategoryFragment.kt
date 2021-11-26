@@ -11,15 +11,19 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import cz.johnyapps.cheers.R
 import cz.johnyapps.cheers.global.fragments.ScopeFragment
 import cz.johnyapps.cheers.counter.CountersAdapter
-import cz.johnyapps.cheers.counter.NewCounterDialog
+import cz.johnyapps.cheers.counter.dialogs.DeleteCountersDialog
+import cz.johnyapps.cheers.counter.dialogs.NewCounterDialog
+import cz.johnyapps.cheers.counter.dialogs.StopCountersDialog
 import cz.johnyapps.cheers.databinding.FragmentCategoryBinding
 import cz.johnyapps.cheers.global.dto.Category
+import cz.johnyapps.cheers.global.dto.Counter
 import cz.johnyapps.cheers.global.fragments.OnBackSupportFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -60,22 +64,63 @@ class CategoryFragment(): ScopeFragment(), OnBackSupportFragment {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.category_menu, menu)
+        if (viewModel.listSelectedCounter.value != null) {
+            inflater.inflate(R.menu.counters_menu, menu)
+        } else {
+            inflater.inflate(R.menu.category_menu, menu)
+        }
+
         super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return if (item.itemId == R.id.newCounterMenuItem) {
-            createNewCounter()
-            true
-        } else {
-            super.onOptionsItemSelected(item)
+        return when (item.itemId) {
+            R.id.newCounterMenuItem -> {
+                showNewCounterDialog()
+                true
+            }
+
+            R.id.stopCounterMenuItem -> {
+                val counters = viewModel.listSelectedCounter.value
+                counters?.let { showStopCountersDialog(listOf(counters)) }
+                true
+            }
+
+            R.id.deleteCounterMenuItem -> {
+                val counters = viewModel.listSelectedCounter.value
+                counters?.let { showDeleteCountersDialog(listOf(counters)) }
+                true
+            }
+
+            else -> {
+                super.onOptionsItemSelected(item)
+            }
+        }
+    }
+
+    private fun showStopCountersDialog(counters: List<Counter>) {
+        val dialog = StopCountersDialog(counters)
+        dialog.show(childFragmentManager, StopCountersDialog.TAG)
+
+        lifecycleScope.launch {
+            dialog.stop.collect { viewModel.stopCounters(it) }
+        }
+    }
+
+    private fun showDeleteCountersDialog(counters: List<Counter>) {
+        val dialog = DeleteCountersDialog(counters)
+        dialog.show(childFragmentManager, DeleteCountersDialog.TAG)
+
+        lifecycleScope.launch {
+            dialog.delete.collect { viewModel.deleteCounters(it) }
         }
     }
 
     private fun setupCounters() {
         binding.countersRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.countersRecyclerView.adapter = counterAdapter
+
+        viewModel.collectSelectedCounters(counterAdapter.selectedItem.map { it.newItem })
 
         launchWhenStarted {
             viewModel.counters.collect {
@@ -98,9 +143,15 @@ class CategoryFragment(): ScopeFragment(), OnBackSupportFragment {
                 viewModel.saveCounter(it)
             }
         }
+
+        launchWhenStarted {
+            viewModel.listSelectedCounter.collect {
+                requireActivity().invalidateOptionsMenu()
+            }
+        }
     }
 
-    private fun createNewCounter() {
+    private fun showNewCounterDialog() {
         val beverages = viewModel.beverages.value
 
         if (beverages != null) {

@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import cz.johnyapps.cheers.R
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -15,12 +16,13 @@ abstract class SelectableAdapter<T, VH: SelectableAdapter<T, VH>.SelectableViewH
     diffCallback: DiffUtil.ItemCallback<T>,
     private val lifecycleScope: LifecycleCoroutineScope
 ): ClickableAdapter<T, VH>(diffCallback, lifecycleScope) {
-    private var selectedItem = MutableStateFlow(OldAndNew<T>(null, null))
+    private var _selectedItem = MutableStateFlow(OldAndNew<T>(null, null))
+    val selectedItem: StateFlow<OldAndNew<T>> = _selectedItem
 
     init {
         lifecycleScope.launchWhenCreated {
-            selectedItem.collect {
-                changeSelection(it.oldItem, it.newItem)
+            _selectedItem.collect {
+                updateSelection(it.oldItem, it.newItem)
             }
         }
 
@@ -41,7 +43,7 @@ abstract class SelectableAdapter<T, VH: SelectableAdapter<T, VH>.SelectableViewH
 
     override fun onBindViewHolder(holder: VH, position: Int) {
         val item = getItem(position)
-        val selectedItem = this.selectedItem.value.newItem
+        val selectedItem = this._selectedItem.value.newItem
         var selected = false
 
         if (selectedItem != null && getItemId(selectedItem) == getItemId(item)) {
@@ -54,12 +56,21 @@ abstract class SelectableAdapter<T, VH: SelectableAdapter<T, VH>.SelectableViewH
         onBindViewHolder(holder, position, selected)
     }
 
+    override fun submitList(list: List<T>?) {
+        this.submitList(list, null)
+    }
+
+    override fun submitList(list: List<T>?, commitCallback: Runnable?) {
+        cancelSelection()
+        super.submitList(list, commitCallback)
+    }
+
     private suspend fun selectNewItem(item: T?) {
-        selectedItem.emit(OldAndNew(selectedItem.value.newItem, item))
+        _selectedItem.emit(OldAndNew(_selectedItem.value.newItem, item))
     }
 
     private fun isSelecting(): Boolean {
-        return selectedItem.value.newItem != null
+        return _selectedItem.value.newItem != null
     }
 
     fun select(item: T?) {
@@ -68,9 +79,15 @@ abstract class SelectableAdapter<T, VH: SelectableAdapter<T, VH>.SelectableViewH
         }
     }
 
-    private suspend fun changeSelection(oldItem: T?, newItem: T?) {
-        if (newItem == oldItem) {
+    fun cancelSelection() {
+        lifecycleScope.launch {
             selectNewItem(null)
+        }
+    }
+
+    private fun updateSelection(oldItem: T?, newItem: T?) {
+        if (newItem == oldItem) {
+            cancelSelection()
             return
         }
 

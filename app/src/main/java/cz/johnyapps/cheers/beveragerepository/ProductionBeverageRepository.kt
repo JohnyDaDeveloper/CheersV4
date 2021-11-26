@@ -68,6 +68,14 @@ class ProductionBeverageRepository(
         database.counterDao().update(CounterDbEntity(counter))
     }
 
+    override fun updateCounters(counters: List<Counter>) {
+        database.counterDao().update(counters.map { CounterDbEntity(it) })
+    }
+
+    override fun deleteCounters(counters: List<Counter>) {
+        database.counterDao().delete(counters.map { CounterDbEntity(it) })
+    }
+
     override fun insertBeverage(beverage: Beverage) {
         val id = database.beverageDao().insert(BeverageDbEntity(beverage))
         beverage.id = id

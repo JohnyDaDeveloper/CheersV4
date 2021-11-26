@@ -4,7 +4,7 @@ data class Counter(
     var id: Long, //TODO Change to val
     val beverage: Beverage,
     val volume: Float,
-    val active: Boolean,
+    var active: Boolean,
     val entries: MutableList<Entry>
 ) {
     constructor(

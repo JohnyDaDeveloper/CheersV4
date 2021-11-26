@@ -1,4 +1,4 @@
-package cz.johnyapps.cheers.counter
+package cz.johnyapps.cheers.counter.dialogs
 
 import android.app.Dialog
 import android.graphics.Color

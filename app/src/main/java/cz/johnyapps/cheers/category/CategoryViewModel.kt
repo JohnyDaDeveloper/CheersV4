@@ -10,6 +10,7 @@ import cz.johnyapps.cheers.global.dto.Counter
 import cz.johnyapps.cheers.global.utils.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
@@ -27,8 +28,11 @@ class CategoryViewModel @Inject constructor(
     private val _beverages = MutableStateFlow<List<Beverage>?>(null)
     val beverages: StateFlow<List<Beverage>?> = _beverages
 
-    private val _selectedCounter = MutableStateFlow<Counter?>(null)
-    val selectedCounter: StateFlow<Counter?> = _selectedCounter
+    private val _categorySelectedCounter = MutableStateFlow<Counter?>(null)
+    val categorySelectedCounter: StateFlow<Counter?> = _categorySelectedCounter
+
+    private val _listSelectedCounter = MutableStateFlow<Counter?>(null)
+    val listSelectedCounter: StateFlow<Counter?> = _listSelectedCounter
 
     private val _counters = MutableStateFlow<List<Counter>?>(null)
     val counters: StateFlow<List<Counter>?> = _counters
@@ -43,7 +47,7 @@ class CategoryViewModel @Inject constructor(
         viewModelScope.launch {
             category.collect {
                 it?.selectedCounter?.collect { counter ->
-                    _selectedCounter.emit(counter)
+                    _categorySelectedCounter.emit(counter)
                 }
             }
         }
@@ -51,6 +55,41 @@ class CategoryViewModel @Inject constructor(
         viewModelScope.launch {
             repository.getAllCounters().collect {
                 _counters.emit(it)
+            }
+        }
+
+        viewModelScope.launch {
+            categorySelectedCounter.collect {
+                moveCounterToTop(it, counters.value)
+            }
+        }
+
+        viewModelScope.launch {
+            counters.collect {
+                moveCounterToTop(categorySelectedCounter.value, it)
+            }
+        }
+    }
+
+    fun stopCounters(counters: List<Counter>) {
+        viewModelScope.launch(Dispatchers.IO) {
+            Logger.d(TAG, "deleteCounters: Stopping ${counters.size} counters")
+            counters.forEach { it.active = false }
+            repository.updateCounters(counters)
+        }
+    }
+
+    fun deleteCounters(counters: List<Counter>) {
+        viewModelScope.launch(Dispatchers.IO) {
+            Logger.d(TAG, "deleteCounters: Deleting ${counters.size} counters")
+            repository.deleteCounters(counters)
+        }
+    }
+
+    fun collectSelectedCounters(counter: Flow<Counter?>) {
+        viewModelScope.launch {
+            counter.collect {
+                _listSelectedCounter.emit(it)
             }
         }
     }
@@ -70,8 +109,13 @@ class CategoryViewModel @Inject constructor(
                 repository.insertBeverage(beverage)
             }
 
-            Logger.i(TAG, "saveCounter: Saving counter for '${beverage.name}' (id: ${counter.id}, value: ${counter.entries.size})")
-            repository.updateCounter(counter)
+            if (counter.id == 0L) {
+                repository.insertCounter(counter)
+                Logger.i(TAG, "saveCounter: Saved counter for '${beverage.name}' (id: ${counter.id}, value: ${counter.entries.size})")
+            } else {
+                Logger.i(TAG, "saveCounter: Updated counter for '${beverage.name}' (id: ${counter.id}, value: ${counter.entries.size})")
+                repository.updateCounter(counter)
+            }
 
             val category = category.value
             
@@ -82,6 +126,35 @@ class CategoryViewModel @Inject constructor(
                 Logger.w(TAG, "saveCounter: Category is null")
             }
         }
+    }
+
+    private suspend fun moveCounterToTop(counter: Counter?, counters: List<Counter>?) {
+        if (counter != null && counters != null && counters.isNotEmpty()) {
+            if (counters.first().id != counter.id) {
+                val mutableCounters = counters.toMutableList()
+                val index = findCounterIndex(counter, mutableCounters)
+
+                if (index != -1) {
+                    Logger.d(TAG, "moveCounterToTop: Moving counter from $index to top")
+
+                    val c = mutableCounters[index]
+                    mutableCounters.removeAt(index)
+                    mutableCounters.add(0, c)
+
+                    _counters.emit(mutableCounters)
+                }
+            }
+        }
+    }
+
+    private fun findCounterIndex(counter: Counter, counters: List<Counter>): Int {
+        counters.forEachIndexed { index, it ->
+            if (counter.id == it.id) {
+                return index
+            }
+        }
+
+        return -1
     }
 
     companion object {

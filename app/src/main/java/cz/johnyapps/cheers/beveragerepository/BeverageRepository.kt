@@ -14,6 +14,8 @@ interface BeverageRepository {
     fun getCounter(counterId: Long): Flow<Counter>
     fun getAllCounters(): Flow<List<Counter>>
     fun updateCounter(counter: Counter)
+    fun updateCounters(counters: List<Counter>)
+    fun deleteCounters(counters: List<Counter>)
 
     fun insertBeverage(beverage: Beverage)
     fun getAllBeverages(): Flow<List<Beverage>>

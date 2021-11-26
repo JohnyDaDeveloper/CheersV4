@@ -9,8 +9,12 @@
 
     <string name="create">Create</string>
     <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="stop">Stop</string>
 
     <string name="new_counter_menu_item">New counter</string>
+    <string name="stop_counter_menu_item">Stop counter</string>
+    <string name="delete_counter_menu_item">Delete counter</string>
 
     <string name="beverage_name_label">Beverage name</string>
     <string name="alcohol">Alcohol</string>
@@ -21,4 +25,14 @@
     <string name="dialog_new_counter_volume_zero">Volume must be larger than 0</string>
     <string name="dialog_new_counter_alcohol_zero">Alcohol must be at least 0</string>
     <string name="dialog_new_counter_general_error">Something went wrong while creating new counter</string>
+
+    <plurals name="dialog_delete_counters_title">
+        <item quantity="one">Delete "%s" counter?</item>
+        <item quantity="other">Delete %s counters?</item>
+    </plurals>
+
+    <plurals name="dialog_stop_counters_title">
+        <item quantity="one">Stop "%s" counter?</item>
+        <item quantity="other">Stop %s counters?</item>
+    </plurals>
 </resources>

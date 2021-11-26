@@ -13,6 +13,12 @@ interface CounterDao {
     @Update
     fun update(counter: CounterDbEntity)
 
+    @Update
+    fun update(counters: List<CounterDbEntity>)
+
+    @Delete
+    fun delete(counters: List<CounterDbEntity>)
+
     @Transaction
     @Query("SELECT * FROM counter_table WHERE counter_id = :counterId")
     fun getWithBeverage(counterId: Long): Flow<CounterAndBeverageDbEntity>

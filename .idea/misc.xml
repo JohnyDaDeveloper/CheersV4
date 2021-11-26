@@ -6,7 +6,10 @@
         <entry key="..\:/Users/Jan Pejsar/StudioProjects/CheersV4/app/src/main/res/drawable/app_icon.xml" value="0.43846153846153846" />
         <entry key="..\:/Users/Jan Pejsar/StudioProjects/CheersV4/app/src/main/res/drawable/ic_add.xml" value="0.43846153846153846" />
         <entry key="..\:/Users/Jan Pejsar/StudioProjects/CheersV4/app/src/main/res/drawable/ic_beer.xml" value="0.43846153846153846" />
+        <entry key="..\:/Users/Jan Pejsar/StudioProjects/CheersV4/app/src/main/res/drawable/ic_delete.xml" value="0.43846153846153846" />
+        <entry key="..\:/Users/Jan Pejsar/StudioProjects/CheersV4/app/src/main/res/drawable/ic_edit.xml" value="0.2635416666666667" />
         <entry key="..\:/Users/Jan Pejsar/StudioProjects/CheersV4/app/src/main/res/drawable/ic_shot.xml" value="0.2635416666666667" />
+        <entry key="..\:/Users/Jan Pejsar/StudioProjects/CheersV4/app/src/main/res/drawable/ic_stop.xml" value="0.43846153846153846" />
         <entry key="..\:/Users/Jan Pejsar/StudioProjects/CheersV4/app/src/main/res/drawable/ic_wine.xml" value="0.43846153846153846" />
         <entry key="..\:/Users/Jan Pejsar/StudioProjects/CheersV4/app/src/main/res/drawable/selected_item_background.xml" value="0.43846153846153846" />
         <entry key="..\:/Users/Jan Pejsar/StudioProjects/CheersV4/app/src/main/res/drawable/splash_icon.xml" value="0.43846153846153846" />
@@ -19,6 +22,7 @@
         <entry key="..\:/Users/Jan Pejsar/StudioProjects/CheersV4/app/src/main/res/layout/item_with_id.xml" value="0.34782608695652173" />
         <entry key="..\:/Users/Jan Pejsar/StudioProjects/CheersV4/app/src/main/res/layout/view_counter.xml" value="0.24739583333333334" />
         <entry key="..\:/Users/Jan Pejsar/StudioProjects/CheersV4/app/src/main/res/menu/category_menu.xml" value="0.42916666666666664" />
+        <entry key="..\:/Users/Jan Pejsar/StudioProjects/CheersV4/app/src/main/res/menu/counters_menu.xml" value="0.24739583333333334" />
       </map>
     </option>
   </component>
