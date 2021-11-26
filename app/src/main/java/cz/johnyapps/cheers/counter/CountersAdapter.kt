@@ -6,9 +6,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.recyclerview.widget.DiffUtil
 import cz.johnyapps.cheers.R
+import cz.johnyapps.cheers.counter.dto.CounterEntity
 import cz.johnyapps.cheers.databinding.ItemCounterBinding
 import cz.johnyapps.cheers.global.adapters.SelectableAdapter
-import cz.johnyapps.cheers.global.dto.Counter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
@@ -18,9 +18,9 @@ import kotlinx.coroutines.launch
 @FlowPreview
 class CountersAdapter(
     private val lifecycleScope: LifecycleCoroutineScope
-): SelectableAdapter<Counter, CountersAdapter.CountersViewHolder>(DIFF_CALL, lifecycleScope) {
-    private val _counterUpdate = MutableSharedFlow<Counter>()
-    val counterUpdate: SharedFlow<Counter> = _counterUpdate
+): SelectableAdapter<CounterEntity, CountersAdapter.CountersViewHolder>(DIFF_CALL, lifecycleScope) {
+    private val _counterUpdate = MutableSharedFlow<CounterEntity>()
+    val counterUpdate: SharedFlow<CounterEntity> = _counterUpdate
 
     private val _counterHeight = MutableStateFlow(0)
     val counterHeight: StateFlow<Int> = _counterHeight
@@ -47,7 +47,7 @@ class CountersAdapter(
         }
     }
 
-    override fun getItemId(item: Counter): Long {
+    override fun getItemId(item: CounterEntity): Long {
         return item.id
     }
 
@@ -66,15 +66,15 @@ class CountersAdapter(
 
     open inner class CountersViewHolder(
         val binding: ItemCounterBinding
-    ): SelectableAdapter<Counter, CountersViewHolder>.SelectableViewHolder(binding.root)
+    ): SelectableAdapter<CounterEntity, CountersViewHolder>.SelectableViewHolder(binding.root)
 
     companion object {
-        private val DIFF_CALL = object : DiffUtil.ItemCallback<Counter>() {
-            override fun areItemsTheSame(oldItem: Counter, newItem: Counter): Boolean {
+        private val DIFF_CALL = object : DiffUtil.ItemCallback<CounterEntity>() {
+            override fun areItemsTheSame(oldItem: CounterEntity, newItem: CounterEntity): Boolean {
                 return oldItem.id == newItem.id
             }
 
-            override fun areContentsTheSame(oldItem: Counter, newItem: Counter): Boolean {
+            override fun areContentsTheSame(oldItem: CounterEntity, newItem: CounterEntity): Boolean {
                 return oldItem == newItem
             }
         }

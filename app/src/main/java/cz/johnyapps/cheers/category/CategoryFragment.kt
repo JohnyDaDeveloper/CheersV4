@@ -14,6 +14,7 @@ import cz.johnyapps.cheers.counter.CountersAdapter
 import cz.johnyapps.cheers.counter.dialogs.DeleteCountersDialog
 import cz.johnyapps.cheers.counter.dialogs.NewCounterDialog
 import cz.johnyapps.cheers.counter.dialogs.StopCountersDialog
+import cz.johnyapps.cheers.counter.dto.CounterEntity
 import cz.johnyapps.cheers.databinding.FragmentCategoryBinding
 import cz.johnyapps.cheers.global.dto.Category
 import cz.johnyapps.cheers.global.dto.Counter
@@ -120,10 +121,10 @@ class CategoryFragment(): ScopeFragment(), OnBackSupportFragment {
         binding.countersRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.countersRecyclerView.adapter = counterAdapter
 
-        viewModel.collectSelectedCounters(counterAdapter.selectedItem.map { it.newItem })
+        viewModel.collectSelectedCounters(counterAdapter.selectedItem.map { it.newItem?.toGlobalDto() })
 
         launchWhenStarted {
-            viewModel.counters.collect {
+            viewModel.counters.map { it?.map { counter -> CounterEntity(counter) } }.collect {
                 counterAdapter.submitList(it)
             }
         }
@@ -140,7 +141,7 @@ class CategoryFragment(): ScopeFragment(), OnBackSupportFragment {
 
         launchWhenStarted {
             counterAdapter.counterUpdate.debounce(500L).collect {
-                viewModel.saveCounter(it)
+                viewModel.saveCounter(it.toGlobalDto())
             }
         }
 

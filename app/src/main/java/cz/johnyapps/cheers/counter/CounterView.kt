@@ -23,8 +23,8 @@ class CounterView: LinearLayoutCompat {
     private val count = MutableStateFlow<List<Entry>>(ArrayList())
     private val jobList = ArrayList<Job>()
 
-    private val _counterUpdate = MutableSharedFlow<Counter>()
-    val counterUpdate: SharedFlow<Counter> = _counterUpdate
+    private val _counterUpdate = MutableSharedFlow<CounterEntity>()
+    val counterUpdate: SharedFlow<CounterEntity> = _counterUpdate
 
     private val _height = MutableStateFlow(0)
     val height: StateFlow<Int> = _height
@@ -104,7 +104,7 @@ class CounterView: LinearLayoutCompat {
                         val counter = this@CounterView.counter.value
 
                         counter?.let {
-                            _counterUpdate.emit(counter.toGlobalDto())
+                            _counterUpdate.emit(counter)
                         }
                     }
                 }
@@ -119,7 +119,7 @@ class CounterView: LinearLayoutCompat {
         }
     }
 
-    suspend fun setCounter(counter: Counter) {
-        this.counter.emit(CounterEntity(counter))
+    suspend fun setCounter(counter: CounterEntity) {
+        this.counter.emit(counter)
     }
 }
