@@ -18,6 +18,7 @@ import cz.johnyapps.cheers.databinding.FragmentCategoryBinding
 import cz.johnyapps.cheers.global.dto.Category
 import cz.johnyapps.cheers.global.dto.Counter
 import cz.johnyapps.cheers.global.fragments.OnBackSupportFragment
+import cz.johnyapps.cheers.global.utils.ThemeUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -64,6 +65,13 @@ class CategoryFragment(): ScopeFragment(), OnBackSupportFragment {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         if (counterAdapter.isSelecting()) {
             inflater.inflate(R.menu.counters_menu, menu)
+
+            val selectAll = menu.findItem(R.id.selectAllMenuItem)
+            if (counterAdapter.isAllSelected()) {
+                selectAll.icon.setTint(ThemeUtils.getAttributeColor(R.attr.colorAccent, requireContext()))
+            } else {
+                selectAll.icon.setTint(ThemeUtils.getAttributeColor(R.attr.colorOnToolbar, requireContext()))
+            }
         } else {
             inflater.inflate(R.menu.category_menu, menu)
         }
@@ -85,6 +93,16 @@ class CategoryFragment(): ScopeFragment(), OnBackSupportFragment {
 
             R.id.deleteCounterMenuItem -> {
                 showDeleteCountersDialog(viewModel.listSelectedCounter.value.map { it.toGlobalDto() })
+                true
+            }
+
+            R.id.selectAllMenuItem -> {
+                if (counterAdapter.isAllSelected()) {
+                    counterAdapter.cancelSelection()
+                } else {
+                    counterAdapter.selectAll()
+                }
+
                 true
             }
 

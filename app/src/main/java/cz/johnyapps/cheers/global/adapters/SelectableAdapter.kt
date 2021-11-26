@@ -26,14 +26,14 @@ abstract class SelectableAdapter<T, VH: SelectableAdapter<T, VH>.SelectableViewH
         lifecycleScope.launch {
             rootClick.collect {
                 if (isSelecting()) {
-                    addSelected(it)
+                    addSelected(it, true)
                 }
             }
         }
 
         lifecycleScope.launch {
             rootLongClick.collect {
-                addSelected(it)
+                addSelected(it, true)
             }
         }
 
@@ -72,13 +72,19 @@ abstract class SelectableAdapter<T, VH: SelectableAdapter<T, VH>.SelectableViewH
         return selected[getItemId(item)] != null
     }
 
+    fun isAllSelected(): Boolean {
+        return selected.size == currentList.size && currentList.isNotEmpty()
+    }
+
     fun isSelecting(): Boolean {
         return selected.isNotEmpty()
     }
 
-    private fun addSelected(item: T) {
+    private fun addSelected(item: T, unselectSelected: Boolean) {
         if (isSelected(item)) {
-            removeSelected(item)
+            if (unselectSelected) {
+                removeSelected(item)
+            }
         } else {
             val size = selected.size
             selected[getItemId(item)] = item
@@ -108,7 +114,7 @@ abstract class SelectableAdapter<T, VH: SelectableAdapter<T, VH>.SelectableViewH
 
     fun selectAll() {
         currentList.forEach {
-            addSelected(it)
+            addSelected(it, false)
         }
     }
 
