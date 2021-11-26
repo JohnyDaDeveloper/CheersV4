@@ -6,9 +6,7 @@ import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.recyclerview.widget.DiffUtil
 import cz.johnyapps.cheers.R
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
@@ -16,30 +14,26 @@ abstract class SelectableAdapter<T, VH: SelectableAdapter<T, VH>.SelectableViewH
     diffCallback: DiffUtil.ItemCallback<T>,
     private val lifecycleScope: LifecycleCoroutineScope
 ): ClickableAdapter<T, VH>(diffCallback, lifecycleScope) {
-    private val _selectedItem = MutableStateFlow(OldAndNew<T>(null, null))
-    val selectedItem: StateFlow<OldAndNew<T>> = _selectedItem
-
     private val _allowSelection = MutableStateFlow(true)
     val allowSelection: StateFlow<Boolean> = _allowSelection
 
-    init {
-        lifecycleScope.launch {
-            _selectedItem.collect {
-                updateSelection(it.oldItem, it.newItem)
-            }
-        }
+    private val _selectedItems = MutableSharedFlow<List<T>>()
+    val selectedItems: SharedFlow<List<T>> = _selectedItems
 
+    private val selected = HashMap<Long, T>()
+
+    init {
         lifecycleScope.launch {
             rootClick.collect {
                 if (isSelecting()) {
-                    select(it)
+                    addSelected(it)
                 }
             }
         }
 
         lifecycleScope.launch {
             rootLongClick.collect {
-                select(it)
+                addSelected(it)
             }
         }
 
@@ -54,12 +48,10 @@ abstract class SelectableAdapter<T, VH: SelectableAdapter<T, VH>.SelectableViewH
 
     override fun onBindViewHolder(holder: VH, position: Int) {
         val item = getItem(position)
-        val selectedItem = this._selectedItem.value.newItem
-        var selected = false
+        val selected = isSelected(item)
 
-        if (selectedItem != null && getItemId(selectedItem) == getItemId(item)) {
+        if (selected) {
             holder.itemView.foreground = ContextCompat.getDrawable(holder.itemView.context, R.drawable.selected_item_background)
-            selected = true
         } else {
             holder.itemView.foreground = null
         }
@@ -76,36 +68,54 @@ abstract class SelectableAdapter<T, VH: SelectableAdapter<T, VH>.SelectableViewH
         super.submitList(list, commitCallback)
     }
 
-    private fun isSelecting(): Boolean {
-        return _selectedItem.value.newItem != null
+    private fun isSelected(item: T): Boolean {
+        return selected[getItemId(item)] != null
     }
 
-    fun select(item: T?) {
-        if (allowSelection.value || item == null) {
-            lifecycleScope.launch {
-                _selectedItem.emit(OldAndNew(_selectedItem.value.newItem, item))
+    fun isSelecting(): Boolean {
+        return selected.isNotEmpty()
+    }
+
+    private fun addSelected(item: T) {
+        if (isSelected(item)) {
+            removeSelected(item)
+        } else {
+            val size = selected.size
+            selected[getItemId(item)] = item
+
+            if (size != selected.size) {
+                lifecycleScope.launch { _selectedItems.emit(selected.values.toList()) }
+                notifyItemChanged(getItemPosition(item))
             }
         }
     }
 
+    private fun removeSelected(item: T) {
+        val size = selected.size
+        selected.remove(getItemId(item))
+
+        if (size != selected.size) {
+            lifecycleScope.launch { _selectedItems.emit(selected.values.toList()) }
+            notifyItemChanged(getItemPosition(item))
+        }
+    }
+
     fun cancelSelection() {
-        select(null)
+        while (selected.isNotEmpty()) {
+            removeSelected(selected.values.first())
+        }
+    }
+
+    fun selectAll() {
+        currentList.forEach {
+            addSelected(it)
+        }
     }
 
     fun setAllowSelection(allow: Boolean) {
         lifecycleScope.launch {
             _allowSelection.emit(allow)
         }
-    }
-
-    private fun updateSelection(oldItem: T?, newItem: T?) {
-        if (newItem == oldItem) {
-            cancelSelection()
-            return
-        }
-
-        oldItem?.let { notifyItemChanged(getItemPosition(oldItem)) }
-        newItem?.let { notifyItemChanged(getItemPosition(newItem)) }
     }
 
     private fun getItemPosition(item: T): Int {
@@ -123,6 +133,4 @@ abstract class SelectableAdapter<T, VH: SelectableAdapter<T, VH>.SelectableViewH
 
     @ExperimentalCoroutinesApi
     open inner class SelectableViewHolder(root: View): ClickableAdapter<T, VH>.ClickableViewHolder(root)
-
-    data class OldAndNew<T>(val oldItem: T?, val newItem: T?)
 }

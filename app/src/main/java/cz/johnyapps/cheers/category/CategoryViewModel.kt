@@ -31,8 +31,8 @@ class CategoryViewModel @Inject constructor(
     private val _categorySelectedCounter = MutableStateFlow<CounterEntity?>(null)
     val categorySelectedCounter: StateFlow<CounterEntity?> = _categorySelectedCounter
 
-    private val _listSelectedCounter = MutableStateFlow<CounterEntity?>(null)
-    val listSelectedCounter: StateFlow<CounterEntity?> = _listSelectedCounter
+    private val _listSelectedCounter = MutableStateFlow<List<CounterEntity>>(emptyList())
+    val listSelectedCounter: StateFlow<List<CounterEntity>> = _listSelectedCounter
 
     private val _counters = MutableStateFlow<List<CounterEntity>?>(null)
     val counters: StateFlow<List<CounterEntity>?> = _counters
@@ -104,7 +104,7 @@ class CategoryViewModel @Inject constructor(
         }
     }
 
-    fun collectSelectedCounters(counter: Flow<CounterEntity?>) {
+    fun collectSelectedCounters(counter: Flow<List<CounterEntity>>) {
         viewModelScope.launch {
             counter.collect {
                 _listSelectedCounter.emit(it)

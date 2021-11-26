@@ -22,7 +22,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -63,7 +62,7 @@ class CategoryFragment(): ScopeFragment(), OnBackSupportFragment {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        if (viewModel.listSelectedCounter.value != null) {
+        if (counterAdapter.isSelecting()) {
             inflater.inflate(R.menu.counters_menu, menu)
         } else {
             inflater.inflate(R.menu.category_menu, menu)
@@ -80,14 +79,12 @@ class CategoryFragment(): ScopeFragment(), OnBackSupportFragment {
             }
 
             R.id.stopCounterMenuItem -> {
-                val counters = viewModel.listSelectedCounter.value
-                counters?.let { showStopCountersDialog(listOf(counters.toGlobalDto())) }
+                showStopCountersDialog(viewModel.listSelectedCounter.value.map { it.toGlobalDto() })
                 true
             }
 
             R.id.deleteCounterMenuItem -> {
-                val counters = viewModel.listSelectedCounter.value
-                counters?.let { showDeleteCountersDialog(listOf(counters.toGlobalDto())) }
+                showDeleteCountersDialog(viewModel.listSelectedCounter.value.map { it.toGlobalDto() })
                 true
             }
 
@@ -102,7 +99,10 @@ class CategoryFragment(): ScopeFragment(), OnBackSupportFragment {
         dialog.show(childFragmentManager, StopCountersDialog.TAG)
 
         lifecycleScope.launch {
-            dialog.stop.collect { viewModel.stopCounters(it) }
+            dialog.stop.collect {
+                counterAdapter.cancelSelection()
+                viewModel.stopCounters(it)
+            }
         }
     }
 
@@ -111,7 +111,10 @@ class CategoryFragment(): ScopeFragment(), OnBackSupportFragment {
         dialog.show(childFragmentManager, DeleteCountersDialog.TAG)
 
         lifecycleScope.launch {
-            dialog.delete.collect { viewModel.deleteCounters(it) }
+            dialog.delete.collect {
+                counterAdapter.cancelSelection()
+                viewModel.deleteCounters(it)
+            }
         }
     }
 
@@ -119,7 +122,7 @@ class CategoryFragment(): ScopeFragment(), OnBackSupportFragment {
         binding.countersRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.countersRecyclerView.adapter = counterAdapter
 
-        viewModel.collectSelectedCounters(counterAdapter.selectedItem.map { it.newItem })
+        viewModel.collectSelectedCounters(counterAdapter.selectedItems)
         viewModel.collectCounterUpdate(counterAdapter.counterUpdate)
 
         launchWhenStarted {
