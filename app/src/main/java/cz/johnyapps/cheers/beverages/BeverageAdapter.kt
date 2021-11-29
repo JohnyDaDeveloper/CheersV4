@@ -2,13 +2,16 @@ package cz.johnyapps.cheers.beverages
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
 import cz.johnyapps.cheers.databinding.ItemBeverageBinding
+import cz.johnyapps.cheers.global.adapters.ClickableAdapter
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-class BeverageAdapter: ListAdapter<BeverageListEntity, BeverageAdapter.BeverageViewHolder>(
-    DIFF_CALLBACK
+@ExperimentalCoroutinesApi
+class BeverageAdapter(scope: LifecycleCoroutineScope): ClickableAdapter<BeverageListEntity, BeverageAdapter.BeverageViewHolder>(
+    DIFF_CALLBACK,
+    scope
 ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BeverageViewHolder {
         return BeverageViewHolder(
@@ -24,7 +27,9 @@ class BeverageAdapter: ListAdapter<BeverageListEntity, BeverageAdapter.BeverageV
         holder.binding.beverage = getItem(position)
     }
 
-    class BeverageViewHolder(val binding: ItemBeverageBinding): RecyclerView.ViewHolder(binding.root)
+    open inner class BeverageViewHolder(
+        val binding: ItemBeverageBinding
+    ): ClickableAdapter<BeverageListEntity, BeverageViewHolder>.ClickableViewHolder(binding.root)
 
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<BeverageListEntity>() {

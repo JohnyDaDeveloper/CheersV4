@@ -12,6 +12,9 @@ interface BeverageDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(beverage: BeverageDbEntity): Long
 
+    @Query("SELECT * FROM beverage_table WHERE beverage_id = :beverageId")
+    fun get(beverageId: Long): Flow<BeverageDbEntity>
+
     @Query("SELECT * FROM beverage_table")
     fun getAll(): Flow<List<BeverageDbEntity>>
 }

@@ -63,6 +63,10 @@ class ProductionBeverageRepository(
         beverage.id = id
     }
 
+    override fun getBeverage(beverageId: Long): Flow<Beverage> {
+        return database.beverageDao().get(beverageId).map { it.toGlobalDto() }
+    }
+
     override fun getAllBeverages(): Flow<List<Beverage>> {
         return database.beverageDao().getAll().map {
             it.map { beverage -> beverage.toGlobalDto() }

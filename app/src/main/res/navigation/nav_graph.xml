@@ -15,5 +15,20 @@
         android:id="@+id/beveragesFragment"
         android:name="cz.johnyapps.cheers.beverages.BeveragesFragment"
         android:label="@string/fragment_beverages"
-        tools:layout="@layout/fragment_beverages" />
+        tools:layout="@layout/fragment_beverages" >
+        <action
+            android:id="@+id/actionOpenBeverage"
+            app:destination="@id/beverageFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/beverageFragment"
+        android:name="cz.johnyapps.cheers.beverage.BeverageFragment"
+        android:label="@string/fragment_beverage"
+        tools:layout="@layout/fragment_beverage" >
+        <argument
+            android:name="beverage_id"
+            app:argType="long"
+            android:defaultValue="0L" />
+    </fragment>
 </navigation>
