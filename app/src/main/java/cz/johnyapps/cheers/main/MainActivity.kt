@@ -7,6 +7,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.navigation.NavigationView
 import cz.johnyapps.cheers.global.enums.Icon
 import cz.johnyapps.cheers.R
 import cz.johnyapps.cheers.global.enums.Sound
@@ -75,6 +76,10 @@ class MainActivity : NavigationActivity() {
 
     override fun getDrawerLayout(): DrawerLayout {
         return binding.drawerLayout
+    }
+
+    override fun getNavView(): NavigationView {
+        return binding.navView
     }
 
     override fun onBackPressed() {

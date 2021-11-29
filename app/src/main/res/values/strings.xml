@@ -12,7 +12,8 @@
     <string name="delete">Delete</string>
     <string name="stop">Stop</string>
 
-    <string name="fragment_categories">Categories</string>
+    <string name="fragment_categories">Counters</string>
+    <string name="fragment_beverages">Beverages</string>
 
     <string name="new_counter_menu_item">New counter</string>
     <string name="stop_counter_menu_item">Stop counter</string>

@@ -10,4 +10,10 @@
         android:label="@string/fragment_categories"
         android:name="cz.johnyapps.cheers.categories.CategoriesFragment"
         tools:layout="@layout/fragment_categories" />
+
+    <fragment
+        android:id="@+id/beveragesFragment"
+        android:name="cz.johnyapps.cheers.beverages.BeveragesFragment"
+        android:label="@string/fragment_beverages"
+        tools:layout="@layout/fragment_beverages" />
 </navigation>

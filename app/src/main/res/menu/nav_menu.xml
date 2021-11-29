@@ -3,5 +3,10 @@
     <item
         android:id="@+id/categoriesFragment"
         android:title="@string/fragment_categories"
-        android:icon="@drawable/ic_categories" />
+        android:icon="@drawable/ic_counter" />
+
+    <item
+        android:id="@+id/beveragesFragment"
+        android:title="@string/fragment_beverages"
+        android:icon="@drawable/ic_beverage" />
 </menu>
