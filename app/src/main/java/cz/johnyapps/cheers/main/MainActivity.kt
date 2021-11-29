@@ -1,7 +1,6 @@
 package cz.johnyapps.cheers.main
 
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.databinding.DataBindingUtil
@@ -16,7 +15,6 @@ import cz.johnyapps.cheers.beveragedatabase.dto.CategoryDbEntity
 import cz.johnyapps.cheers.databinding.ActivityMainBinding
 import cz.johnyapps.cheers.global.activities.NavigationActivity
 import cz.johnyapps.cheers.global.fragments.OnBackSupportFragment
-import cz.johnyapps.cheers.global.utils.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -80,7 +78,6 @@ class MainActivity : NavigationActivity() {
     }
 
     override fun onBackPressed() {
-        //TODO: Fix after navigation implementation
         val fragment: Fragment = binding.navHostFragment.getFragment()
 
         if (fragment !is OnBackSupportFragment || !fragment.onBackPressed()) {
