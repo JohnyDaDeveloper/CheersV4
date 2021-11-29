@@ -38,13 +38,13 @@ class CategoryViewModel @Inject constructor(
     val counters: StateFlow<List<CounterEntity>?> = _counters
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             repository.getAllBeverages().collect {
                 _beverages.emit(it)
             }
         }
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.Default) {
             category.collect {
                 it?.selectedCounter?.map { counter ->
                     counter?.let { CounterEntity(counter) }
@@ -54,7 +54,7 @@ class CategoryViewModel @Inject constructor(
             }
         }
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             repository.getAllCounters().map {
                 it.map { counter -> CounterEntity(counter) }
             }.collect {
@@ -62,13 +62,13 @@ class CategoryViewModel @Inject constructor(
             }
         }
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.Default) {
             categorySelectedCounter.collect {
                 moveCounterToTop(it, counters.value)
             }
         }
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.Default) {
             counters.collect {
                 moveCounterToTop(categorySelectedCounter.value, it)
             }

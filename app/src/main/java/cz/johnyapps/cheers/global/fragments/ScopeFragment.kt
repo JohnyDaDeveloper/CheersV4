@@ -4,9 +4,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 open class ScopeFragment: Fragment() {
     fun launchWhenStarted(action: suspend () -> Unit) {
         lifecycleScope.launch {
